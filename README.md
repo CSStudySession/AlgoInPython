@@ -1,2 +1,2 @@
 # AlgoInPython
-Python Algo
+Algo in Python
