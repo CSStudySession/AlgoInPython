@@ -42,4 +42,3 @@ listA = ['A', 'B', 'C', 'D', 'E', 'F']
 listB = ['A',  'C',  'F']
 
 print(insert_with_order(listA, listB, 'D'))
-
