@@ -1,43 +1,41 @@
 from typing import List
-
+import collections
 class Solution:
-    # method 1: DFS graph
+    def find(self, union: List[int], id: int) -> int:
+        if union[id] != id: # 根不是自己: 递归寻根并把自己挂在一级根上(路径压缩)
+            union[id] = self.find(union, union[id])
+        return union[id]
+
     def accountsMerge(self, accounts: List[List[str]]) -> List[List[str]]:
+        len_accnt = len(accounts)
+        union = []
+        for i in range(len_accnt): # 初始化union-find:每个account都以自己为根
+            union.append(i)
         
-        graph = collections.defaultdict(set)
-        emailToName = {}
-     
-        # build undirected graph with emails: email1 <-> sets of other emails. 
-        # email1作为root email, other email只需要加email1即可(不需要完全双向 只需要联通即可)
-        for account in accounts:    
-            email1 = account[1]
-            emailToName[email1] = account[0]    
-            for i in range(2, len(account)):  
-                graph[email1].add(account[i])
-                graph[account[i]].add(email1)
+        # 记录每个邮箱在哪些id下出现过 构建{email:[ids]}索引
+        email_to_ids = collections.defaultdict(List)
+        for i in range(len_accnt):
+            for j in range(1, len(accounts[i])): # 邮箱从第二个元素开始 第一个元素是人名
+                email_to_ids[accounts[i][j]].append(i)
 
-        visited = set() # this is global visited.
-        
-        res = [] #res是list of tmp. tmp是每个account的搜索结果
-        for account in accounts:
-            email1 = account[1]
-            if email1 not in visited:
-                tmp = [] # 对每个account都需要一个tmp. 结构是: ["name", "email1", "email2""] 
-                visited.add(email1)
-                tmp.append(account[0])
-                tmp.append(email1)
-            
-                self.dfs(email1, graph, tmp, visited) #以email1为起始点 search for all connected emails, add to tmp
-                tmp[1:] = sorted(tmp[1:])
-                res.append(tmp)
-        return res
+        # 将共享邮箱的ids利用并查集合并
+        for id_list in email_to_ids.values():
+            for k in range(1, id_list): # 同一个email下的所有id 都挂在id_list[0]下面
+                union[self.find(id_list[k])] = self.find(id_list[0])
 
-    def dfs(self, node, graph, tmp, visited):
-        if node not in graph:
-            return 
+        # 把邮箱按照其在 u-f处理后的id所属的集合 加入到同一个set中
+        sets = [set()] * len_accnt # [set1, set2, ...]
+        for i in range(len_accnt):
+            for j in range(1, len(accounts[i])):
+                sets[self.find(i)].add(accounts[i][j])
 
-        for nei in graph[node]:
-            if nei not in visited:
-                visited.add(nei)
-                tmp.append(nei)
-                self.dfs(nei, graph, tmp, visited)
+        # 把含有邮箱的set中的元素加入到最终答案中
+        ret = []
+        for j in range(len_accnt):
+            if sets[j]:
+                cur = []
+                cur.append(accounts[i][0])
+                for email in sets[j]:
+                    cur.append(email)
+                ret.append(cur)
+        return ret
