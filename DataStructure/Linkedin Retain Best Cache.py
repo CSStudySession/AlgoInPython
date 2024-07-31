@@ -30,10 +30,13 @@ class RetainBestCache:
         self.data_source = data_source
         self.cache_size = entries_to_retain
         self.cache = dict()
-        self.pq = heapq.heapify([])
-
-        pass
+        self.pq = []
 
     def get(self, key: K) -> Rankable:
-
-        pass
+        if key in self.cache:
+            return self.cache[key]
+        self.cache[key] = self.data_source.get(key)
+        heapq.heappush(self.pq, Item(key, self.cache[key]))
+        if len(self.pq) > self.cache_size:
+            del self.cache[heapq.heappop(self.pq)]
+        return self.cache[key]

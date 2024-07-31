@@ -1,3 +1,7 @@
+'''
+https://leetcode.com/problems/max-stack/description/    linked高频
+'''
+
 from collections import OrderedDict
 
 class Node:
