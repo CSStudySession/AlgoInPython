@@ -10,6 +10,7 @@ time complexity: O(n) -> 沿抛物线算两个f_x数组O(n), merge two sorted li
 '''
 
 from typing import List
+
 def compute_sorted_fx(nums: List[float], a:float, b:float, c:float) -> List[float]:
     if (a <= 0):
         raise ValueError("input a should be >= 0")

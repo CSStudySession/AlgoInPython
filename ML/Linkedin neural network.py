@@ -1,9 +1,8 @@
 '''
 给定node和edge的NN定义 实现几个NN的接口. 可以按需添加node和edge的字段.
 '''
-
-import math
 from typing import List
+import math
 import random # 给bias node用
 
 class Edge:

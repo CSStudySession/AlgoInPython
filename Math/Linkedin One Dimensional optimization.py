@@ -36,7 +36,7 @@ def calculate_min_val(left: float, right: float) -> float:
         mid_with_epsilon = mid + epsilon
 
         mid_val = evaluate_at(mid)
-        mid_with_epsilon_val = evaluate_at(mid_with_epsilon_val)
+        mid_with_epsilon_val = evaluate_at(mid_with_epsilon)
 
         if mid_val > mid_with_epsilon_val:
             left = mid          # negative gradient (x->x+delta_x, val decreases) min locates to the right 

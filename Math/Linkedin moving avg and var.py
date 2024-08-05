@@ -15,8 +15,6 @@ after math derivation, we have: # 公式推导见notion
 var_n+1 ^2 = (x_n+1 - avg(x_n))^2 / (n+1) + var_n ^2 * (n-1)/n
 '''
 
-import sys
-
 class StreamingAverage:
     def __init__(self):
         self.avg = 0.0
@@ -24,7 +22,7 @@ class StreamingAverage:
 
     def calculate_avg(self, sample: float) -> float:
         self.cnt += 1
-        self.avg += (sample - self.avg) / self.cnt  # 参看line 8的注释推导
+        self.avg += (sample - self.avg) / self.cnt  # 参看上面的注释推导
         return self.avg
     
 class StreamingVar:
