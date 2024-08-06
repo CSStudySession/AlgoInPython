@@ -85,13 +85,13 @@ class LinkedList:
 
     def insertNext(self, node, count):
         # insert a node in front of this node with count=count
-        nextNode = node.next
+        nextNode = node.next        # 先记录住当前node的下一个节点nxt 一会儿要把new_node和nxt连起来
 
-        new_node = Node(count)
+        new_node = Node(count)      # 连接new_node和当前的node
         new_node.prev = node
         new_node.next = nextNode
 
-        node.next = new_node
+        node.next = new_node       # 连接new_node和nxt
         nextNode.prev = new_node
 
         return new_node

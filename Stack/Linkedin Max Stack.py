@@ -1,7 +1,6 @@
 '''
 implement a max stack. Interfaces are given.
 
-
 '''
 
 from typing import TypeVar, Generic
@@ -76,7 +75,7 @@ class MaxStack_B(Generic[T]):
         self.sorted_set = SortedSet([], key=lambda x: x.val)
 
     def push(self, to_push: T) -> None:    # O(log(n)) time: sorted_set add()   
-        node = Node(T)
+        node = Node(to_push)
         self.tail.append_left(node)
         self.sorted_set.add(node)            
 

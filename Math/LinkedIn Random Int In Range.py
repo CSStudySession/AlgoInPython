@@ -12,10 +12,10 @@ def get_random01_biased() -> int:
     return 1 if random.random() > 0.3 else 0
 
 def get_random01_uniformed() -> int:
-    seed = get_random01_biased() + (get_random01_biased() << 2) # 区分01和10 如果不区分 两种情况加起来都是1
+    seed = get_random01_biased() + (get_random01_biased() << 1) # 区分01和10 如果不区分 两种情况加起来都是1
     if seed == 1:      # 1,0
         return 0
-    elif seed == 4:    # 0,1
+    elif seed == 2:    # 0,1
         return 1
     else:              # 非法组合 重新生成
         return get_random01_uniformed()    
@@ -23,7 +23,7 @@ def get_random01_uniformed() -> int:
 def get_random06_uniform() -> int:
     # 把[0,6]之间的数字拆解成binary expression: 3 bits needed -> x = rand * 2^0 + rand * 2^1 + rand * 2^2
     seed = get_random01_uniformed() + (get_random01_uniformed() << 1) + (get_random01_uniformed() << 2)
-    return seed if seed <= 6 else get_random06_uniform()
+    return seed if seed < 6 else get_random06_uniform()
 
 
 '''
@@ -81,3 +81,21 @@ def test_get_random01_biased_from_01uniform(p, num_trials=100000):
 
 test_get_random01_biased_from_01uniform(0.3)
 test_get_random01_biased_from_01uniform(0.7)
+
+# Variance: given random7 return random10
+# Testing the rand10 function:
+# 1. 先扔两次 产生49个数: num = ((first - 1) * 7 + second)
+# 2. 如果num<40, return num%10 + 1 如果大于,重复random10.
+
+import random
+
+def rand7():
+    return random.randint(1, 7)
+
+def rand10():
+    while True:
+        num1 = rand7() - 1
+        num2 = rand7() - 1
+        result = num1 * 7 + num2  # Generates a number between 0 and 48
+        if result <= 40:
+            return (result % 10) + 1
