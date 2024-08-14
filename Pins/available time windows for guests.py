@@ -226,13 +226,14 @@ class StoreScheduler:
             time, change = heapq.heappop(heap)
             
             # 注意下面这里一定要写成">" 不能">=". 有可能出现同一个时间点 有两个事件的情况
-            if time > prev:   
+            if time > prev:
+                # 如果只要求输出容量大于或等于K的时间段 这里加逻辑:if cur_cap >= K:
                 result[f"{self.minutes_to_time(prev)}-{self.minutes_to_time(time)}"] = cur_cap
             cur_cap += change
             prev = time
 
         # 处理营业时间结束前的最后一个时间段
-        if prev < self.closing:
+        if prev < self.closing: # and cur_cap >= K: (如果只要求输出容量大于或等于K的时间段)
             result[f"{self.minutes_to_time(prev)}-{self.minutes_to_time(self.closing)}"] = cur_cap
 
         return result
