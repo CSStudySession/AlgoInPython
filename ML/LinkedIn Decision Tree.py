@@ -1,6 +1,6 @@
 '''
 design and implement a decision tree. focus on termination criteria and OOP.
-assume boolean features and boolean lable variables.
+assume boolean features and boolean label variables.
 
 '''
 import math
@@ -80,6 +80,9 @@ def calculate_entropy(instances:List[Instance], feature: Feature) -> float:
         # count how many this target feature in instances
         if feature in ins.features:
             feat_cnt += 1
+    # # 当p=0或1时 entropy为0
+    if feat_cnt == 0 or feat_cnt == len(instances):
+        return 0.0
     prob = feat_cnt / len(instances) # feature出现的概率
     return - (prob * math.log(prob) + (1 - prob) * math.log(1 - prob))
 
