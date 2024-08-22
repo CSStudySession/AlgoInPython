@@ -7,6 +7,24 @@ array里有大小写字母 A B C ...表示门, a b c...表示钥匙 有钥匙才
 变种题2: v2
 中间有墙和不同的门， 墙过不去，门需要用特定的钥匙打开 matrix只有一个门的钥匙
 
+思路:BFS遍历 在每一轮BFS中 从队列中取出当前的位置、当前收集到的钥匙状态和当前步数。
+对当前点的四个方向进行扩展：
+- 如果是墙 '1'，跳过。
+- 如果是钥匙（小写字母），更新钥匙的状态。
+- 如果是锁（大写字母），检查是否有对应的钥匙，有则继续，否则跳过。
+- 对于空地 '0'，直接继续搜索。
+- 每走一步后，将新状态加入队列，并将状态标记为已访问。
+终止条件 一旦达到终点 返回当前步数 如果队列为空但仍未达到目标状态 返回-1表示无法到达终点
+
+时间复杂度分析
+状态数：由于有 k 把钥匙，钥匙的状态可以用 2^k 表示，而每个位置 (i, j) 可能有 2^k 种状态。
+BFS遍历 队列中最多会有 O(m * n * 2^k) 个状态，每个状态最多有 4 个扩展方向。
+因此，时间复杂度为 O(m * n * 2^k * 4)，即 O(m * n * 2^k)。
+
+空间复杂度分析
+队列空间：最多会有 O(m * n * 2^k) 个状态在队列中。
+访问标记：同样需要 O(m * n * 2^k) 的空间来存储访问过的状态。
+因此，空间复杂度也是 O(m * n * 2^k)
 '''
 from typing import List
 from collections import deque
@@ -15,12 +33,14 @@ def shortest_path_v1(grid: List[List[str]], start: List[int], end:List[int]) -> 
     if not grid or not grid[0] or (grid[end[0]][end[1]] == '1'):
         return -1
     
-    row, col, key = len(grid), len(grid[0]), 0
+    row, col = len(grid), len(grid[0])
+    
+    # 注意如果Bfs目标如果是走到终点 则不需要统计总共的钥匙数量
     # 遍历grid 收集所有钥匙数
-    for i in range(row):
-        for j in range(col):
-            if grid[i][j].isalpha() and grid[i][j].islower(): # 钥匙
-                key += 1
+    # for i in range(row):
+    #    for j in range(col):
+    #        if grid[i][j].isalpha() and grid[i][j].islower(): # 钥匙
+    #            key += 1
     
     # BFS准备
     queue = deque([(start[0], start[1], 0, 0)])

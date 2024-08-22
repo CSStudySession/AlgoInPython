@@ -21,7 +21,6 @@ input:
   screen_len = 5
 output: 2
 
-
 思路:
 将pins按照结束位置bottom_ind排序。这样可以按顺序处理pins 确保我们总是处理当前结束位置最靠前的pin。
 使用一个最小堆fitted_pins_heap 来存储当前可见的pins。堆中的元素按开始位置top_ind排序。

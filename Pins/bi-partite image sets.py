@@ -71,7 +71,6 @@ def divideImages(pairs: List[List[int]]) -> List[List[str]]:
     
     return [group1, group2]
 
-
 # unit test case 1
 pairs = [["I_1", "I_4"], ["I_4", "I_8"], ["I_8", "I_2"]]
 print(divideImages(pairs))  # [['I_1', 'I_8'], ['I_4', 'I_2']]

@@ -28,7 +28,7 @@ source and target consist of lowercase English letters.
 
 思路: 
 1.用一个二维哈希表(或者二维数组)index_to_next来表示当前source的index右边(包括index本身)每一个字母第一次出现的位置的下一个位置。
-比如abbc 那么index[0]['a']=1 index[0]['b'] = 2, index[1]['b']= 2, index[2]['b']= 3..从右向左遍历一遍source即可完成更新index_to_next
+比如abbc 那么index[0]['a']= 1 index[0]['b'] = 2, index[1]['b']= 2, index[2]['b']= 3..从右向左遍历一遍source即可完成更新index_to_next
 2.然后遍历target, source和target的位置分别记为i和j 我们执行以下操作:
 1.index_to_next[0]当中是否存在target[j] 即整个source中是否存在j 不存在则返回-1
 2.index_to_next[i]当中是否存在target[j] 如果不存在 说明source在位置i右侧不存在target[j] i应当归零从头开始找

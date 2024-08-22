@@ -40,7 +40,6 @@ class Solution:
         if not transactions:
             return 0
 
-
         # trans[i][0]给trans[i][1] 转了trans[i][2]块钱
         # 如果最终想实现平衡(每人里外里收支为零): trans[i][0]需要被给trans[i][2]块钱, trans[i][1]需要给出trans[i][2]块钱 
         book = defaultdict(int)

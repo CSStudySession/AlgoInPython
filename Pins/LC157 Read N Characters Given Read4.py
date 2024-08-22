@@ -1,6 +1,5 @@
 '''
 https://leetcode.com/problems/read-n-characters-given-read4/description/
-
 '''
 """
 The read4 API is already defined for you.

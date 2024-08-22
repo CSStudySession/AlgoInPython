@@ -6,7 +6,7 @@ i.e for candidate i -> there must be k candidates where es[i] > es[j] and rs[i] 
 
 e.g
 es = [1, 2, 3, 4, 5]
-rs = [1,2, 3, 4, 5]
+rs = [1, 2, 3, 4, 5]
 K = 1
 Output: 4 since all candidates except the 0th one have at least one other candidate 
 where its engagement and relevance score is greater than another candidate
@@ -22,6 +22,11 @@ Implementation should be in O(n log n)
 对于每个从es优先队列中弹出的元素 我们也需要从rs优先队列中删除相应索引的元素。并且rs score比当前元素低的值 也需要被删除
 3.统计剩余候选人
 最后统计rs优先队列中剩下的候选人数量 这个数量就是符合条件的候选人数量。
+
+注意: We need to keep track of the elements removed from the rs priority queue by storing them in a set,
+and shouldn't start the delete process if the element is already removed. 
+Otherwise we'll end up deleting all the elements from rs priority queue,
+because we'll never find the target element.
 
 时间复杂度为 O(n log n)
 空间复杂度为 O(n)
@@ -46,13 +51,16 @@ def find_greater_than_k_others(es:List[int], rs:List[int], k:int) -> int:
     # 删除前k个得分最低的候选人
     while k:
         es_score, index = heapq.heappop(es_pq)
+        # remove that element from the rs priority queue, 
+        # along with all the other elements lower than that. 
         if index not in removed:
             while rs_pq and rs_pq[0][1] != index:
                 _, popped_index = heapq.heappop(rs_pq)
                 removed.add(popped_index)    # 注意这里需要把index加到removed set中
             # 删除对应的rs中的元素
-            heapq.heappop(rs_pq)
-            removed.add(index)
+            if rs_pq:
+                heapq.heappop(rs_pq)
+                removed.add(index)
         k -= 1        
     # 剩余候选人数量即为答案
     return len(rs_pq)

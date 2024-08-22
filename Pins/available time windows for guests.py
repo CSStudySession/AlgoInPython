@@ -29,11 +29,9 @@ specified above along with a parameter N indicating the number of people to seat
 堆中的每个元素是一个 [time, seats] 对，表示某个时间点 time 和该时间点发生的座位变化 seats
 正数表示增加座位，负数表示减少座位。
 返回处理后的事件堆，包含所有预订的开始和结束时间点。
-2. 遍历时间堆，检查每个时间段是否可以容纳 n 人。如果可以，记录这个时间段。
+2. 遍历时间堆 检查每个时间段是否可以容纳n人。如果可以 记录这个时间段。
 在遍历的过程中 通过更新当前容量cur_cap来实时跟踪可用座位情况。
-遍历结束后，如果最后一个事件后的时间段依然可以容纳 n 人，则将其加入结果列表。
-
-
+遍历结束后 如果最后一个事件后的时间段依然可以容纳n人 则将其加入结果列表。
 
 时间复杂度: O(m*logm) 其中m是预订信息的数量
 空间复杂度: O(m)
@@ -65,14 +63,13 @@ class ReservationScheduler:
         if n > self.cap:
             return []
 
-        size = len(self.time_slots_heap)
         available_intervals = []
 
         prev = self.opening
         cur_cap = self.cap
-        for i in range(size):
-            time, seats = self.time_slots_heap[i]
-
+        heap_copy = self.time_slots_heap.copy()
+        while heap_copy:
+            time, seats = heapq.heappop(heap_copy)
             # 如果当前时间 time 大于 prev（上一个时间点），且当前可用座位数 cur_cap 大于或等于 n，
             # 那么 [prev, time] 之间的时间段可以容纳 n 人，将其加入 result 列表。
             if time > prev and cur_cap >= n:
@@ -81,28 +78,27 @@ class ReservationScheduler:
             cur_cap += seats
             prev = time
 
-        # 如果堆中最后一个事件的时间点（heap[size - 1][0]）早于餐厅关闭时间 self.close，
+        # 如果堆中最后一个事件的时间点prev 早于餐厅关闭时间 self.close，
         # 说明在这个事件之后到餐厅关闭之间仍有可用时间段
-        if self.time_slots_heap[size - 1][0] < self.close:
-            available_intervals.append([self.time_slots_heap[size - 1][0], self.close])
+        if prev < self.close:
+            available_intervals.append([prev, self.close])
 
         # merge intervals in available_intervals
         # 可用的time intervals 很可能有重叠: 
         # 比如可能出现[[18, 19],[19, 22]] 两个区间是相邻的 可以合并为 [[18, 22]]
         ret = []
-
-        start = available_intervals[0][0]
-        end = available_intervals[0][1]
-        size = len(available_intervals)
-        for i in range(size):
-            if end >= available_intervals[i][0]:
-                # merge these
-                end = max(end, available_intervals[i][1])
-            else:
-                ret.append([start, end])
-                start = available_intervals[i][0]
-                end = available_intervals[i][1]
-        ret.append([start, end])
+        if available_intervals:
+            start = available_intervals[0][0]
+            end = available_intervals[0][1]
+            
+            for interval in available_intervals[1:]:
+                if end >= interval[0]:
+                    end = max(end, interval[1])
+                else:
+                    ret.append([start, end])
+                    start = interval[0]
+                    end = interval[1]
+            ret.append([start, end])
         return ret
     
 # unit test
@@ -117,9 +113,7 @@ restaurant = {
         {'start': 16, 'end': 20, 'ppl': 2}
     ]
 }
-
 rs = ReservationScheduler(restaurant)
-
 print(rs.all_available_time_slots_seating_N_seating(5))
 
 '''
@@ -189,7 +183,7 @@ class StoreScheduler:
         hour, minute = map(int, time_parts[0].split(':'))
         if 'PM' in time_parts[1] and hour != 12:
             hour += 12
-        if 'AM' in time_parts[1] and hour == 12:
+        elif 'AM' in time_parts[1] and hour == 12:
             hour = 0
         return hour * 60 + minute
 
@@ -217,7 +211,7 @@ class StoreScheduler:
 
     def available_capacity_intervals(self) -> dict[str, int]:
         result = {}
-        heap = list(self.time_slots_heap)
+        heap = self.time_slots_heap.copy() # 创建堆的副本，避免修改原始数据
 
         prev = self.opening
         cur_cap = self.capacity
@@ -227,15 +221,48 @@ class StoreScheduler:
             
             # 注意下面这里一定要写成">" 不能">=". 有可能出现同一个时间点 有两个事件的情况
             if time > prev:
-                # 如果只要求输出容量大于或等于K的时间段 这里加逻辑:if cur_cap >= K:
                 result[f"{self.minutes_to_time(prev)}-{self.minutes_to_time(time)}"] = cur_cap
             cur_cap += change
             prev = time
 
         # 处理营业时间结束前的最后一个时间段
-        if prev < self.closing: # and cur_cap >= K: (如果只要求输出容量大于或等于K的时间段)
+        if prev < self.closing:
             result[f"{self.minutes_to_time(prev)}-{self.minutes_to_time(self.closing)}"] = cur_cap
+        return result
+    
+    # 题目如果要求只输出容量大于或等于k的时间段
+    def available_capacity_intervals_for_K(self, k) -> dict[str, int]:
+        result = {}
+        heap = self.time_slots_heap.copy() # 创建堆的副本，避免修改原始数据
 
+        prev = self.opening
+        cur_cap = self.capacity
+        
+        # 用来跟踪上一个有效时间段的结束时间。
+        # 有助于我们合并连续的有效时间段。
+        last_valid_time = self.opening
+
+        while heap:
+            time, change = heapq.heappop(heap)
+            if time > prev:
+                if cur_cap >= k:
+                    if prev > last_valid_time:
+                        result[f"{self.minutes_to_time(prev)}-{self.minutes_to_time(time)}"] = cur_cap
+                    else:
+                        result[f"{self.minutes_to_time(last_valid_time)}-{self.minutes_to_time(time)}"] = cur_cap
+                    last_valid_time = time
+                elif prev < last_valid_time:
+                    result[f"{self.minutes_to_time(last_valid_time)}-{self.minutes_to_time(prev)}"] = result.get(f"{self.minutes_to_time(last_valid_time)}-{self.minutes_to_time(prev)}", cur_cap)
+                    last_valid_time = prev
+            cur_cap += change
+            prev = time
+
+        # 处理营业时间结束前的最后一个时间段
+        if prev < self.closing and cur_cap >= k:
+            if prev > last_valid_time:
+                result[f"{self.minutes_to_time(prev)}-{self.minutes_to_time(self.closing)}"] = cur_cap
+            else:
+                result[f"{self.minutes_to_time(last_valid_time)}-{self.minutes_to_time(self.closing)}"] = cur_cap
         return result
 
 # unit test

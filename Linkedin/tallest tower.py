@@ -39,6 +39,9 @@ def max_tower_height(blocks: List[List[int]]) -> int:
             
             # 尝试使用当前砖块
             for k in range(1, count + 1):
+                # 当前重量是j 用了k块重weight的砖 所以之前的状态重量是:(j-k*weight)
+                # 之前的状态必须合法 所以j-k*weight >= 0
+                # 当前的重量必须要在当前砖的承受力之内:j<=max_support 
                 if j >= k * weight and j <= max_support:
                     dp[i][j] = max(dp[i][j], dp[i - 1][j - k * weight] + k)
     
@@ -58,8 +61,8 @@ print(f"最大高度: {result2}")
 # followup: 如果每块砖的高度不一样
 # 还是按照承重能力从小到大排序
 def max_tower_height_w(blocks):
-    # 按承重能力从小到大排序
-    blocks.sort(key=lambda x: x[2])
+    # 按(承重能力递增,高度递减)排序:先用 承重差且高度高的blocks
+    blocks.sort(key=lambda x: (x[2], -x[3]))
     
     n = len(blocks)
     max_weight = max(block[2] for block in blocks)
