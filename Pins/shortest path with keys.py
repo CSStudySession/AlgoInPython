@@ -35,7 +35,7 @@ def shortest_path_v1(grid: List[List[str]], start: List[int], end:List[int]) -> 
     
     row, col = len(grid), len(grid[0])
     
-    # 注意如果Bfs目标如果是走到终点 则不需要统计总共的钥匙数量
+    # 注意如果Bfs目标是走到终点 则不需要统计总共的钥匙数量
     # 遍历grid 收集所有钥匙数
     # for i in range(row):
     #    for j in range(col):
