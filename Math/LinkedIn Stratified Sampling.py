@@ -24,6 +24,7 @@ optimal solution: resovior sampling
 from typing import List
 from collections import defaultdict
 import random
+import threading
 
 class Instance:
     def __init__(self, label: str = ""):
@@ -33,10 +34,13 @@ class InstanceIterator:
     def __init__(self, start, end):
         self.cur = start
         self.end = end
-    def has_next() -> bool:
-        pass
-    def next() -> Instance:
-        pass
+        self.lock = threading.Lock()
+    def has_next(self) -> bool:
+        with self.lock: # 没要求多线程不写这句
+            pass
+    def next(self) -> Instance:
+        with self.lock: # 没要求多线程不写这句
+            pass
     
 def sampling(iterator: InstanceIterator, requirement: dict[str, int]) -> dict[str, List[Instance]]:
     ret = defaultdict(list)
@@ -73,3 +77,58 @@ sample = order Examples by rnd;
 sample = limit sample $M;
 ----
 '''
+
+# 下面这版实现 是考虑线程安全 InstanceIterator类 和 sampling方法里 都相应加了锁
+class Instance:
+    def __init__(self, label: str = ""):
+        self.label = label
+    # Instance 类不需要任何同步机制
+    # 1. 它是不可变的（label 在初始化后不会改变）
+    # 2. 每次调用 InstanceIterator.next() 都会创建一个新实例
+    # 3. 它没有修改内部状态的方法
+
+class InstanceIterator:
+    def __init__(self, start, end):
+        self.cur = start
+        self.end = end
+        self.lock = threading.Lock()  # InstanceIterator 需要锁来保证线程安全
+
+    def has_next(self) -> bool:
+        with self.lock:
+            return self.cur < self.end
+
+    def next(self) -> Instance:
+        with self.lock:
+            if self.cur >= self.end:
+                raise StopIteration
+            instance = Instance(f"Label_{self.cur}")  # 创建新的Instance对象
+            self.cur += 1
+            return instance
+
+def sampling(iterator: InstanceIterator, requirement: dict[str, int]) -> dict[str, List[Instance]]:
+    ret = defaultdict(list)
+    counter = defaultdict(int)
+    lock = threading.Lock()  # 这个锁用于保护ret和counter
+
+    while True:
+        try:
+            cur_ins = iterator.next()  # InstanceIterator的next方法已经是线程安全的
+        except StopIteration:
+            break
+        
+        cur_label = cur_ins.label  # 访问Instance的label不需要同步
+
+        with lock:
+            cur_cnt = len(ret[cur_label])
+            cur_num = counter[cur_label]
+
+            if cur_cnt < requirement[cur_label]:
+                ret[cur_label].append(cur_ins)
+            else:
+                idx = random.randint(0, cur_num)
+                if idx < requirement[cur_label]:
+                    ret[cur_label][idx] = cur_ins
+        
+            counter[cur_label] = cur_num + 1
+    
+    return ret
