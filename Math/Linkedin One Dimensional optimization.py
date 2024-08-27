@@ -12,7 +12,7 @@ array example:
 [10, 5, 0, 2, 3, 5, 7, 15, 20]
 
 variants:
-1. find min for a non-convex but unimodal fucntion? (全局还是只有一个极值点)
+1. find min for a non-convex but unimodal function? (全局还是只有一个极值点)
 binary search still holds.
 2. time complexity?
 O( log(L/epsilon) )

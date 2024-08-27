@@ -49,7 +49,7 @@ print(find_median(nums))
 
 '''
 followup: 如果数组太大 无法放到一台机器上 如何分布式求解?
-利用p-persentile distributed calcuation求解
+利用p-percentile distributed calcuation求解
 
 步骤 1:数据分割
 将大数组分割成若干小块，每块数据可以放入单台机器进行处理。假设有 N 台机器，那么将数组分割成 N 块，每块由一个机器负责处理。
@@ -75,9 +75,10 @@ def split_data(data, num_chunks):
     return np.array_split(data, num_chunks)
 
 # 生成初始候选中位数
+# replace=False无放回抽样 确保候选的多样性
 def initial_candidates(data_chunks, num_candidates):
     all_data = np.concatenate(data_chunks)
-    return random.sample(list(all_data), num_candidates)
+    return np.random.choice(all_data, num_candidates, replace=False)
 
 # 在每个机器上计算小于等于候选的个数
 def count_less_equal(data_chunk, candidates):
@@ -87,7 +88,10 @@ def count_less_equal(data_chunk, candidates):
 def aggregate_counts(counts_per_machine):
     return np.sum(counts_per_machine, axis=0)
 
-def find_median_distributed(data, num_machines, num_candidates):
+# 引入error_tolerance参数 允许近似解
+# 添加precision_threshold 当上下界差异很小时结束搜索
+# 使用max_iterations限制最大迭代次数
+def find_median_distributed(data, num_machines, num_candidates, max_iterations=100, error_tolerance=1, precision_threshold=1e-6):
     # 将数据分成若干块
     data_chunks = split_data(data, num_machines)
     
@@ -96,39 +100,47 @@ def find_median_distributed(data, num_machines, num_candidates):
     
     # 目标中位数的位置
     median_position = len(data) // 2
+    lower_bound, upper_bound = min(data), max(data)
     
-    while True:
-        # 在每个机器上计算小于等于候选的个数
+    for iteration in range(max_iterations):
         counts_per_machine = [count_less_equal(chunk, candidates) for chunk in data_chunks]
-        
-        # 汇总所有机器的统计结果
         total_counts = aggregate_counts(counts_per_machine)
         
-        # 找到累计个数刚好超过中位数位置的候选
         for i, count in enumerate(total_counts):
             if count >= median_position:
                 current_median = candidates[i]
                 break
         
-        # 检查是否满足中位数条件
-        if total_counts[i] == median_position:
+        # 改进的收敛条件
+        if abs(total_counts[i] - median_position) <= error_tolerance:
             return current_median
         
-        # 更新候选范围
         if total_counts[i] < median_position:
-            lower_bound = candidates[i]
+            lower_bound = current_median
         else:
-            upper_bound = candidates[i]
+            upper_bound = current_median
         
-        # 生成新的候选
-        candidates = [random.uniform(lower_bound, upper_bound) for _ in range(num_candidates)]
+        # 检查精度阈值
+        if upper_bound - lower_bound < precision_threshold:
+            return (upper_bound + lower_bound) / 2
+        
+        # 生成新的候选.
+        # 在当前范围内线性插值生成新候选 而不是随机均匀分布
+        candidates = np.linspace(lower_bound, upper_bound, num_candidates)
+    
+    # 如果达到最大迭代次数，返回最佳近似值
+    return current_median
 
-# 示例数据
-data = np.random.randint(0, 100, size=1000)
-num_machines = 10
-num_candidates = 5
-
-# 求解中位数
-median = find_median_distributed(data, num_machines, num_candidates)
-print("Estimated median is:", median)
+# unit test
+def test_distributed_median():
+    np.random.seed(42)  # 为了可重复性
+    data = np.random.randint(0, 1000, 100000)  # 生成大量随机数据
+    true_median = np.median(data)
+    
+    distributed_result = find_median_distributed(data, num_machines=5, num_candidates=10)
+    
+    print(f"True median: {true_median}")
+    print(f"Distributed algorithm result: {distributed_result}")
+    print(f"Absolute error: {abs(true_median - distributed_result)}")
+test_distributed_median()
 '''
