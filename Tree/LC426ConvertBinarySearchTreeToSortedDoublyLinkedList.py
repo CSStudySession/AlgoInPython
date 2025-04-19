@@ -7,6 +7,10 @@ class Node:
         self.left = left
         self.right = right
 
+'''
+Meta variant: traverse binary tree inorder and convert to double-linked list in place
+solution is exactly the same as below.(same in order traversal, same way to construct the list)
+'''
 class Solution:
     # method 1: DFS in-order traverse a tree, get a node list. 
     # then link each node, and link head and tail. ->need extra space O(n)

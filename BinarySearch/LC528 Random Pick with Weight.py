@@ -20,7 +20,9 @@ w idx:        0   1    2
 
 问题转化为: 随机出一个[1,max_prefix_sum]之间的整数target 然后二分前缀和数组 
 找到第一个大于等于target的值 等价于找到了这个随机数落在了哪个长度的区间内
-二分找到的值 代表了所在区间长度的右端点 它的下标 也就是w原数组的下标  
+二分找到的值 代表了所在区间长度的右端点 它的下标 也就是w原数组的下标 
+
+测试方法: 1) fix target 比较output 2)call this multiple times
 '''
 
 import random
