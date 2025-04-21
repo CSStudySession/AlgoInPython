@@ -1,23 +1,96 @@
-from typing import List
-from collections import deque
+from typing import List, collections
 
-class Solution:
-    def shortestPathBinaryMatrix(self, grid: List[List[int]]) -> int:
-        size = len(grid) - 1
-        if grid[0][0] == 1 or grid[size][size] == 1: return -1
-        if len(grid) == 1: return 1
+# 解法1: bfs. 直接修改输入 优化空间复杂度. T(m*n) S(n*n) 每个格子最多处理1次
+def shortestPathBinaryMatrix(grid: List[List[int]]) -> int:
+    size = len(grid) - 1
+    if grid[0][0] == 1 or grid[size][size] == 1:
+        return -1
+    if len(grid) == 1: # n * n 只有1个格子
+        return 1
+    
+    dx = [0, 1, 0, -1, 1, 1, -1, -1]
+    dy = [1, 0, -1, 0, 1, -1, 1, -1]
+    step = 0
+    queue = collections.deque([(0,0)])
+    grid[0][0] = 1 # 把走过的路变成obsticles 节省用visited
+    while queue:
+        step += 1 # 这里加step 之后不用加了
+        for i in range(len(queue)):
+            x, y = queue.popleft()
+            if x == size and y == size:
+                return step
+            for d in range(8):
+                newx = x + dx[d]
+                newy = y + dy[d]
+                if 0 <= newx <= size and 0 <= newy <= size and grid[newx][newy] == 0:
+                    queue.append((newx, newy))
+                    grid[newx][newy] = 1 # mark visited
+    return -1
 
-        queue, level = deque([(0,0)]), 2 # at least two cells: start and end cells
-        while queue:
-            for _ in range(len(queue)):
-                coord_y, coord_x = queue.popleft()
-                for (dx,dy) in ((0, -1), (-1, -1), (-1, 0), (-1, 1), (0, 1), (1, 1), (1, 0), (1, -1)):
-                    nx, ny = coord_x + dx, coord_y + dy
-                    if nx < 0 or ny < 0 or nx > size or ny > size or grid[ny][nx] != 0: # filter out unfeasible cell
-                        continue
-                    if ny == size and nx == size: # find end cell
-                        return level
-                    grid[ny][nx] = 2 # act as a visted set
-                    queue.append((ny, nx)) # enqueue a feasible new cell
-            level += 1
-        return -1 
+# variant: return one shorest path. 
+# bfs的过程中 用dict[(nx, ny)] = (x, y)表示从(x,y)走到的(nx,ny). 在终点back trace回去.
+def oneShortestPathBinaryMatrix(grid: List[List[int]]) -> List[tuple[int]]:
+    size = len(grid) - 1
+    if grid[0][0] == 1 or grid[size][size] == 1:
+        return []
+    if len(grid) == 1: # n * n 只有1个格子
+        return [(0, 0)]
+    
+    dx = [0, 1, 0, -1, 1, 1, -1, -1]
+    dy = [1, 0, -1, 0, 1, -1, 1, -1]
+    step = 0
+    queue = collections.deque([(0,0)])
+    trace = collections.defaultdict(tuple)
+    grid[0][0] = 1 # 把走过的路变成obsticles 节省用visited
+    while queue:
+        step += 1 # 这里加step 之后不用加了
+        for _ in range(len(queue)):
+            x, y = queue.popleft()
+            if x == size and y == size:
+                ret = collections.deque()
+                ret.appendleft((x, y))
+                while (x, y) != (0 ,0):
+                    (x, y) = trace[(x, y)]
+                    ret.appendleft((x, y))
+                return ret
+            for d in range(8):
+                newx = x + dx[d]
+                newy = y + dy[d]
+                if 0 <= newx <= size and 0 <= newy <= size and grid[newx][newy] == 0:
+                    queue.append((newx, newy))
+                    trace[(newx, newy)] = (x, y)
+                    grid[newx][newy] = 1 # mark visited
+    return []
+
+# variant: return any one path, not necessary shorest. 
+# 解法:DFS.
+def onePathBinaryMatrix(grid: List[List[int]]) -> List[tuple[int]]:
+    if not grid or grid[0][0] != 0 or grid[len(grid) - 1][len(grid[0]) - 1] != 0:
+        return -1
+    tmp = [(0,0)]
+    ret = []
+    grid[0][0] = 1
+    dfs(ret, tmp, grid, 0, 0)
+    return ret
+    
+def dfs(ret, tmp, grid, x, y):
+    if len(ret) > 0: # 找到一个解
+        return
+    if x == len(grid) - 1 and y == len(grid[0]) - 1:
+        ret.append(tmp[:]) # 这里要深拷贝
+        return
+    
+    dx = [0, 1, 0, -1, 1, 1, -1, -1]
+    dy = [1, 0, -1, 0, -1, 1, 1, -1]
+    for i in range(8):
+        nx, ny = x + dx[i], y + dy[i]
+        if 0 <= nx <= len(grid) - 1 and 0 <= ny <= len(grid[0]) - 1 and grid[nx][ny] == 0:
+            grid[nx][ny] = 1 # mark visted
+            tmp.append((nx, ny)) # add trace
+            dfs(ret, tmp, grid, nx, ny)
+            tmp.pop()  # restore status
+            grid[nx][ny] = 0
+
+grid0 = [[0,0,0],[1,1,0],[1,1,0]]
+grid1 = [[0,1],[1,0]]
+print(oneShortestPathBinaryMatrix(grid1))

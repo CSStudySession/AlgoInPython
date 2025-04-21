@@ -3,9 +3,9 @@ import collections
 class MovingAverage:
 
     def __init__(self, size: int):
-        self.queue = collections.queue()
-        self.size = size
-        self.total = 0
+        self.queue = collections.deque()
+        self.size = size # 队列目标长度(非实际长度)
+        self.total = 0   # 队列内数值之和
         
 
     def next(self, val: int) -> float:
