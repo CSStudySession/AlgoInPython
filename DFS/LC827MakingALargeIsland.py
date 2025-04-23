@@ -1,55 +1,47 @@
 from typing import List
-from typing import Dict
 
-class Solution:
-    def largestIsland(self, grid: List[List[int]]) -> int:
-        if not grid: return 0
-        area: Dict[int, int] = {} # area[island_id] = area, island_id is the key
-        res = 0
-        index = 2
-        size = 0
-        
-        for i in range(len(grid)):
-            for j in range(len(grid[0])):
-                if grid[i][j] == 1:
-                    grid[i][j] = index
-                    size = self.dfs(i, j, grid, index) 
-                    area[index]  = size
-                    res = max(res, area[index])
-                    index += 1
-      
-
-        for i in range(len(grid)):
-            for j in range(len(grid[0])):
-                if grid[i][j] == 0: # 遍历所有0 尝试变成1之后计算连起来的area
-                    maxArea = 1
-                    visited = set()     # island_id
-                    for (newi, newj) in self.getNeighbors(i, j):
-                        if self.isValid(newi, newj, grid) and grid[newi][newj] not in visited and grid[newi][newj] in area:
-                            visited.add(grid[newi][newj])
-                            island_id = grid[newi][newj]
-                            maxArea += area[island_id]
-                    res = max(res, maxArea) # 注意res位置 需要对每一个0更新面积
-        return res
-
-    def dfs(self, x, y, grid, index) -> int:
-        count = 1
-        for (newx, newy) in self.getNeighbors(x, y):
-            if self.isValid(newx, newy, grid) and grid[newx][newy] == 1:
-                grid[newx][newy] = index
-                count += self.dfs(newx, newy, grid, index)
-        return count
+# 思路: DFS.
+# 1. 把图上所有联通区域的面积计算出来 用dict记录
+# 2. 遍历grid上每个0 把它变成1 然后四个方向探索是否能与已有的联通区域连接 计算面积
+# T(mn), S(mn) from dfs call stack
+def largestIsland(grid: List[List[int]]) -> int:
+    if not grid:
+        return 0
+    area = {} # 记录 {联通域_id:对应面积}
+    idx = 2   # 给一个区别于0,1的值 用来染色
+    ret = 0
+    dx = [0, 1, 0, -1]
+    dy = [1, 0, -1, 0]
+    for i in range(len(grid)):
+        for j in range(len(grid[0])):
+            if grid[i][j] == 1:
+                grid[i][j] = idx # 染色
+                size = dfs(grid, i, j, dx, dy, idx)
+                area[idx] = size
+                idx += 1
+                ret = max(ret, size)
     
-    def getNeighbors(self, x, y) -> List[int]:
-        res = []
-        dx = [0, 1, 0, -1]
-        dy = [1, 0, -1, 0]
+    for i in range(len(grid)):
+        for j in range(len(grid[0])):
+            if grid[i][j] == 0:
+                cur_max = 1 # 至少有一个'0'可以变1
+                # 注意visited在if里面!不能写外面 这里为了防止 当前0把上下左右
+                # 本已联通的面积 重复相加. 每个新“0”都单独算自己的
+                visited = set()
+                for k in range(4):
+                    ni, nj = i + dx[k], j + dy[k]
+                    if 0 <= ni < len(grid) and 0 <= nj < len(grid[0]) and grid[ni][nj] != 0 and grid[ni][nj] not in visited:
+                        cur_idx = grid[ni][nj]
+                        visited.add(cur_idx)
+                        cur_max += area[cur_idx]
+                ret = max(ret, cur_max)
+    return ret
 
-        for d in range(4):
-            newx = x + dx[d]
-            newy = y + dy[d]
-            res.append((newx, newy))
-        return res
-    
-    def isValid(self, x, y, grid) -> bool:
-        return 0 <= x < len(grid) and 0 <= y < len(grid[0])
+def dfs(self, grid, x, y, dx, dy, idx) -> int:
+    cnt = 1
+    for k in range(4):
+        nx, ny = x + dx[k], y + dy[k]
+        if 0 <= nx < len(grid) and 0 <= ny < len(grid[0]) and grid[nx][ny] == 1:
+            grid[nx][ny] = idx
+            cnt += self.dfs(grid, nx, ny, dx, dy, idx)
+    return cnt

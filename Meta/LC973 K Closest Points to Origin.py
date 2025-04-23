@@ -1,0 +1,57 @@
+from typing import List
+import heapq
+# 解法1: max-heap. T(nlog(k)) S(k)
+def kClosest_v1(points: List[List[int]], k: int) -> List[List[int]]:
+    heap = []
+    for i in range(len(points)):
+        # negate the distance to simulate max heap(默认小根堆)
+        dist = -calc_dist(points[i])
+        # fill the heap with the first k elements of points
+        if len(heap) < k:
+            heapq.heappush(heap, (dist, i))
+        elif dist > heap[0][0]:
+            # If this point is closer than the kth farthest,
+            # discard the farthest point and add this one
+            # 注意这个if算是一个常数级别的优化 避免多余的heap push/pop Meta followup可能问
+            heapq.heappushpop(heap, (dist, i))
+    
+    # Return all points stored in the max heap
+    ret = []
+    for _, idx in heap:
+        ret.append(points[idx]) # 注意这里是idx 别写成i
+    return ret
+# Calculate and return the squared Euclidean distance.
+def calc_dist(self, point: List[int]) -> int: # 不需要开根号
+    return point[0] ** 2 + point[1] ** 2 #  算平方用'**'
+
+# 解法2: quick selection
+def kClosest(points: List[List[int]], k: int) -> List[List[int]]:
+    idx = quick_selection(points, 0, len(points) - 1, k)
+    return points[:idx + 1]
+
+def quick_selection(points: List[List[int]], start: int, end: int, k: int) -> int:
+    while start < end:
+        left, right = start - 1, end + 1
+        pivot = calc_dist(points[(start + end) // 2])
+        while left < right:
+            while True:
+                left += 1
+                next_left = calc_dist(points[left])
+                if next_left >= pivot:
+                    break
+            while True:
+                right -= 1
+                next_right = calc_dist(points[right])
+                if next_right <= pivot:
+                    break
+            if left < right:
+                points[left], points[right] = points[right], points[left]
+        if k <= right - start + 1: # 这里要取等于 不能放到下面:可能会漏解 下面start会跳过right
+            end = right
+        else:
+            k -= right - start + 1 # 注意这里k要调整 往右找 要减掉左边已经in-order的个数
+            start = right + 1
+    return start
+
+def calc_dist(self, point) -> int:
+    return point[0] ** 2 + point[1] ** 2
