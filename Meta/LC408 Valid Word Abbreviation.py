@@ -2,14 +2,12 @@
 solution: two pointers T: O(n)  S: O(n)for tmp字符串构建  
 '''
 def validWordAbbreviation(word: str, abbr: str) -> bool:
-    if len(word) < len(abbr): return False # word比abbr还短 一定不会匹配 
-
+    if len(word) < len(abbr): return False # word比abbr还短 一定不会匹配
     i, j = 0, 0
     while i < len(word) and j < len(abbr):
         if word[i] != abbr[j]:
             if abbr[j] == '0' or not abbr[j].isdigit():
                 return False
-                
             tmp = '' # 截取abbr当前的数字段
             while j < len(abbr) and abbr[j].isdigit():
                 tmp += abbr[j]

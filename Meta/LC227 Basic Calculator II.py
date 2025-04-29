@@ -1,5 +1,4 @@
 # 包括加减乘除 没有括号
-
 '''
     linear scan: time O(n) space O(1)
     let ch be current char in s
