@@ -10,14 +10,16 @@ class TreeNode:
 
 '''
 bfs层序遍历:check valid nodes layer by layer
-大体思想: 每层从左到右检查 是否是"complete" 检查过程中每个节点左右孩子入队构建下一层bfs 几个小细节见代码里的注释
+思想: 每层从左到右检查 是否是"complete" 检查过程中每个节点左右孩子入队构建下一层bfs 几个小细节见代码里的注释
+注意当左右孩子为null时 也要入队!
 '''
 class Solution:
     def isCompleteTree(self, root: Optional[TreeNode]) -> bool:
         seen_null = False
         queue = collections.deque([root])
         while queue:
-            if seen_null: # 当前是个null结点 如果当前层还有其他非null的结点 说明一定不满足条件 直接返回false
+            if seen_null: # 之前见过null 如果当前层还有其他非null的结点 说明一定不满足条件 直接返回false
+                          # 最后一层节点的左右null孩子 也会入队. 如果是完全二叉树 这一层都会是null
                 return not any(queue)
             
             for _ in range(len(queue)):
@@ -27,6 +29,6 @@ class Solution:
                 else:
                     if seen_null: # 当前点不是null 之前见过null->"不complete"
                         return False
-                    queue.append(node.left)   # 左右children入队
+                    queue.append(node.left)   # 左右children入队 可以入队null
                     queue.append(node.right)
         return True  # 查了所有layer都没问题 返回
