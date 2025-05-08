@@ -6,14 +6,14 @@ def customSortString(order: str, s: str) -> str:
     if not order or not s:
         return ""
     ch_to_freq = collections.Counter(s)
-    ret = ""
+    ret = []
     for char in order:
         while ch_to_freq[char] > 0:
-            ret += char
+            ret.append(char)
             ch_to_freq[char] -= 1
     for char, freq in ch_to_freq.items():
-        ret += char * freq
-    return ret
+        ret.append(char * freq)
+    return ''.join(ret)
 
 # followup: how to optimize the above solution?
 # instead using dict which could have hash collision issues, use list to store frequence.

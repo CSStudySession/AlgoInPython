@@ -28,7 +28,7 @@ def shortestPathBinaryMatrix(grid: List[List[int]]) -> int:
     return -1
 
 # variant: return one shorest path. 
-# bfs的过程中 用dict[(nx, ny)] = (x, y)表示从(x,y)走到的(nx,ny). 在终点back trace回去.
+# 解法1: bfs的过程中 用dict[(nx, ny)] = (x, y)表示从(x,y)走到的(nx,ny). 在终点back trace回去.
 def oneShortestPathBinaryMatrix(grid: List[List[int]]) -> List[tuple[int]]:
     size = len(grid) - 1
     if grid[0][0] == 1 or grid[size][size] == 1:
@@ -38,12 +38,10 @@ def oneShortestPathBinaryMatrix(grid: List[List[int]]) -> List[tuple[int]]:
     
     dx = [0, 1, 0, -1, 1, 1, -1, -1]
     dy = [1, 0, -1, 0, 1, -1, 1, -1]
-    step = 0
     queue = collections.deque([(0,0)])
     trace = collections.defaultdict(tuple)
     grid[0][0] = 1 # 把走过的路变成obsticles 节省用visited
     while queue:
-        step += 1 # 这里加step 之后不用加了
         for _ in range(len(queue)):
             x, y = queue.popleft()
             if x == size and y == size:
@@ -59,6 +57,33 @@ def oneShortestPathBinaryMatrix(grid: List[List[int]]) -> List[tuple[int]]:
                 if 0 <= newx <= size and 0 <= newy <= size and grid[newx][newy] == 0:
                     queue.append((newx, newy))
                     trace[(newx, newy)] = (x, y)
+                    grid[newx][newy] = 1 # mark visited
+    return []
+
+# variant: return one shorest path. 
+# 解法2: bfs的queue中 每个元素(x,y, path_so_far) path_so_far为起点到当前点的路径
+# 这样空间复杂度与bfs一样
+def one_shortest_path(grid: List[List[int]]) -> List[tuple[int]]:
+    size = len(grid) - 1
+    if grid[0][0] == 1 or grid[size][size] == 1:
+        return []
+    if len(grid) == 1: # n * n 只有1个格子
+        return [(0, 0)]
+    
+    dx = [0, 1, 0, -1, 1, 1, -1, -1]
+    dy = [1, 0, -1, 0, 1, -1, 1, -1]
+    queue = collections.deque([(0, 0, [(0,0)])])
+    grid[0][0] = 1 # 把走过的路变成obsticles 节省用visited
+    while queue:
+        for _ in range(len(queue)):
+            x, y, path = queue.popleft()
+            if x == size and y == size:
+                return path
+            for d in range(8):
+                newx = x + dx[d]
+                newy = y + dy[d]
+                if 0 <= newx <= size and 0 <= newy <= size and grid[newx][newy] == 0:
+                    queue.append((newx, newy, path + (newx, newy))) # 注意不能用extend()
                     grid[newx][newy] = 1 # mark visited
     return []
 
