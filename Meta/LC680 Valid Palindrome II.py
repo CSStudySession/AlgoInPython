@@ -4,7 +4,6 @@ Example 1:
 Input: s = "aba"
 Output: true
 '''
-
 # time O(n) space O(1)
 def validPalindrome(s: str) -> bool:
     if not s:

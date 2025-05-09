@@ -11,6 +11,13 @@ from collections import deque
 
 '''
 思路: loop from left to right of rtn[], and maintain a min_cost and a min_dep_cost.
+- 从前往后遍历rtn数组(从idx=1天开始) 对于每一个返回日i 希望搭配一个之前所有出发日中最便宜的dep[k](k < i)
+    - 维护一个变量min_dep_cost 表示截止到第i-1天最便宜的出发票价
+- 每一步都尝试更新总成本
+  - 当前返回价是rtn[i], 尝试用当前的min_dep_cost组成一次往返 min_dep_cost+rtn[i]
+  - 比较后更新当前最小总价min_tot_cost
+- 更新当前最便宜出发票价
+  - 因为dep[i]可能更便宜 所以更新min_dep_cost:min(dep[i], min_dep_cost)
 '''
 def find_min_cost(dep: List[int], rtn: List[int]) -> int:
     if not dep or not rtn:

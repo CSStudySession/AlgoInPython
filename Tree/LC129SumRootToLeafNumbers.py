@@ -6,25 +6,22 @@ class TreeNode:
         self.left = left
         self.right = right
 
-# 解法1 BFS. code适用于节点值是multi-digit的情况
+# OG 思路:BFS. multi-digit的情况 不要用字符串拼接的方式做 面试时会被reject. 
+# T(n) S(n)
 def sumNumbers_bfs(root: Optional[TreeNode]) -> int:
     if not root: return 0
     total = 0
     queue = collections.deque([(root, root.val)]) # 队列元素是a list of tuple 
-
     while queue:
         node, pathSum = queue.popleft()
         if not node.left and not node.right:
             total += pathSum
             continue
-
         if node.left: # 注意这里append的是node.left/right val是node.left/right的
-            queue.append((node.left, int(str(pathSum) + str(node.left.val))))
+            queue.append((node.left, pathSum * 10 + node.left.val))
         if node.right:
-            queue.append((node.right, int(str(pathSum) + str(node.right.val))))
-    
+            queue.append((node.right, pathSum * 10 + node.right.val))
     return total
-
 
 '''
 variant1: value of nodes can contain any number from [0,999]
@@ -71,7 +68,12 @@ if there is an odd number of negative nodes in the path, and conversely positive
 if there is an even number of negative nodes in the path.
 These are known as a negative path and a positive path, respectively.
 For example, the root-to-leaf path 1 ->-2 -> 3 represents thenumber -123. return sum of root to leaf.
-思路:
+思路:DFS遍历所有从根到叶子的路径
+- 记录当前路径对应的数字（将节点的绝对值按位拼接）
+- 同时记录路径中负数的数量（用来确定符号）
+- 到达叶子节点时 根据负数数量决定正负号 加入总和
+- 不是叶节点 递归计算左右子树
+T(n) S(n)
 '''
 def sum_nums(root:TreeNode) -> int:
     return dfs(root, 0, 0)

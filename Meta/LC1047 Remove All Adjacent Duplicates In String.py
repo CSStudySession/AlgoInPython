@@ -1,4 +1,3 @@
-
 # variant: return final string after all dup removed.
 # e.g. s:'abbbacxdd' -> s:'cx'   s:'azxxxzy' -> s:'ay'
 
@@ -76,9 +75,6 @@ s = "aaabbbc" # c
 s = "aaaabbbacd" # "aacd" 
 s = "abbcccbd" # "ad"
 print(remove_duplicates_by_three(s))
-
-
-
 
 # OG below
 # 解法1: stack 注意当栈顶元素与当前元素相等时 只pop一次 满足一次只能移除两个的条件
