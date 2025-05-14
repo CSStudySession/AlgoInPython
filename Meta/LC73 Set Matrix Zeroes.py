@@ -48,4 +48,3 @@ def setZeroes(matrix: list[list[int]]) -> None:
     if first_col_zero:
         for i in range(row):
             matrix[i][0] = 0
-    return matrix

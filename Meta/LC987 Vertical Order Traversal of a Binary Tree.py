@@ -45,7 +45,6 @@ def vertical_print(root: Optional[TreeNode]) -> None:
             queue.append((curr.left, i + 1, j - 1))
         if curr.right:
             queue.append((curr.right, i + 1, j + 1))
-    ret = []
     for k in range(min_col, max_col + 1): # 遍历所有列.
         # tuple排序 默认先按第一个值 再按第二个值 (升序)
         print([val for _, val in sorted(col_to_val[k])])
@@ -69,7 +68,7 @@ def verticalTraversal(root: Optional[TreeNode]) -> List[int]:
             queue.append((curr.right, i + 1, j + 1))
     ret = []
     for k in range(min_col, max_col + 1): # 遍历所有列.
-        # .extend()返回一维列表 元素都往一个list里面塞
+        # .extend()in-place更新一维列表 元素都往一个list里面塞
         # tuple排序 默认先按第一个值 再按第二个值 (升序)
         ret.extend([val for _, val in sorted(col_to_val[k])])
     return ret

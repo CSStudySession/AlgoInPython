@@ -25,9 +25,9 @@ def findKthLargest1(nums: List[int], k: int) -> int:
     if not nums:
         return 0
     k = len(nums) - k
-    return quickSelect(nums, k, 0, len(nums) - 1)
+    return quickSelect_dfs(nums, k, 0, len(nums) - 1)
 
-def quickSelect(nums, k, start, end) -> int:
+def quickSelect_dfs(nums, k, start, end) -> int:
     pivot = nums[start]
     left, right = start, end  # 要重新assign pointer, 因为需要left right不断移动
     while left <= right:
@@ -41,10 +41,29 @@ def quickSelect(nums, k, start, end) -> int:
             right -= 1
     # 结束的时候left在右 right在左[start, right, left, end]
     if k >= left:
-        quickSelect(nums, k, left, end)
+        quickSelect_dfs(nums, k, left, end)
     if k <= right:
-        quickSelect(nums, k, start, right)
-    return nums[k]
+        quickSelect_dfs(nums, k, start, right)
+    return nums[k] # 一定要return. 否则k落在等于pivot区间时 会死循环
+
+def quickSelect_iter(self, nums: List[int], k: int, start: int, end: int) -> int:
+    while start <= end:
+        left, right = start, end
+        pivot = nums[(start + end) // 2]
+        while left <= right:
+            while left <= right and nums[left] < pivot:
+                left += 1
+            while left <= right and nums[right] > pivot:
+                right -= 1
+            if left <= right:
+                nums[left], nums[right] = nums[right], nums[left]
+                left += 1
+                right -= 1
+        if k >= left: # 分成两个区间[start, right] [left, end] 根据k的位置选一个
+            start = left
+        elif k <= right:
+            end = right
+        else: return # 注意一定要有return 否则会在k落在等于pivot区间时死循环!
 
 '''
 variant: return the kth + 1 largest num.

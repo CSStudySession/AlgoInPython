@@ -1,8 +1,8 @@
 '''
 Given two nodes of a binary tree p and q, return their lowest common ancestor (LCA).
 Each node will have a reference to its parent node. The definition for Node is below:
+note: if val type is char, the solution still holds.
 '''
-
 class Node:
     def __init__(self, val):
         self.val = val
@@ -50,3 +50,33 @@ def lowestCommonAncestor(self, p: 'Node', q: 'Node') -> 'Node':
         else:
             q = q.parent
     return None
+
+'''
+varint:What if you were given all the nodes as a part of a vector, and no longer the root node?
+给list of nodes, nodes是乱序的.Node对象只有左右孩子指针 没有parent指针.
+思路:
+1. 遍历list 构造node-to-parent关系 用dict存这个关系.
+2. 利用交替指针法 两个新指针起点分别是p,q 然后沿着dict往上trace parent, 直到两指针相遇即为lca.
+ - 当某个指针比如p,走到头(即root节点 不在dict中) 把p指向q “交替指针” 最终一定相遇
+T(n) S(n)
+'''
+def find_lca_given_list_node(nodes:list[Node], p:Node, q:Node) -> Node:
+    node_to_parent = {}
+    for node in nodes:
+        if node.left:
+            node_to_parent[node.left] = node
+        if node.right:
+            node_to_parent[node.right] = node
+    
+    cur_p, cur_q = p, q # 两个新ref 起点p,q
+    while cur_p != cur_q: # 相遇时即为lca
+        if cur_p in node_to_parent:
+            cur_p = node_to_parent[cur_p]
+        else: # 走到root节点 没有parent 重置为对面的起点
+            cur_p = q
+        
+        if cur_q in node_to_parent:
+            cur_q = node_to_parent[cur_q]
+        else:
+            cur_q = p
+    return cur_p

@@ -26,32 +26,28 @@ def calc_dist(self, point: List[int]) -> int: # 不需要开根号
 
 # 解法2: quick selection
 def kClosest(points: List[List[int]], k: int) -> List[List[int]]:
-    idx = quick_selection(points, 0, len(points) - 1, k)
-    return points[:idx + 1]
+    quick_selection(points, 0, len(points) - 1, k)
+    return points[:k]
 
-def quick_selection(points: List[List[int]], start: int, end: int, k: int) -> int:
-    while start < end:
-        left, right = start - 1, end + 1
+def quick_selection(points: List[List[int]], start: int, end: int, k: int):
+    while start <= end:
+        left, right = start, end
         pivot = calc_dist(points[(start + end) // 2])
-        while left < right:
-            while True:
+        while left <= right:
+            while left <= right and calc_dist(points[left]) < pivot:
                 left += 1
-                next_left = calc_dist(points[left])
-                if next_left >= pivot:
-                    break
-            while True:
+            while left <= right and calc_dist(points[right]) > pivot:
                 right -= 1
-                next_right = calc_dist(points[right])
-                if next_right <= pivot:
-                    break
-            if left < right:
+            if left <= right: # 注意交换完 指针也要更新
                 points[left], points[right] = points[right], points[left]
-        if k <= right - start + 1: # 这里要取等于 不能放到下面:可能会漏解 下面start会跳过right
+                left += 1
+                right -= 1
+
+        if k <= right:
             end = right
-        else:
-            k -= right - start + 1 # 注意这里k要调整 往右找 要减掉左边已经in-order的个数
-            start = right + 1
-    return start
+        elif k >= left:
+            start = left
+        else: return # 注意一定要return. k落在等于pivot区间里 直接返回 否则死循环
 
 def calc_dist(self, point) -> int:
     return point[0] ** 2 + point[1] ** 2

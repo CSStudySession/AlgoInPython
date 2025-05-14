@@ -25,7 +25,7 @@ def verticalOrder(root: Optional[TreeNode]) -> List[List[int]]:
             queue.append((node.left, idx - 1))
         if node.right:
             queue.append((node.right, idx + 1))
-            node_dict[idx].append(node.val)
+        node_dict[idx].append(node.val)
     
     for i in range(min_col, max_col + 1):
         ret.append(node_dict[i])
