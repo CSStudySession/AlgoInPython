@@ -51,7 +51,7 @@ left,right两个指针 right每前进一次 total+=a[right] 如果tot比k大了 
 T(n) S(1)
 '''
 def subarray_sum_k_all_positive_item(nums:list[int], k) -> bool:
-    left, right = 0, 0
+    left = 0
     tot = 0
     for right in range(len(nums)):
         tot += nums[right]

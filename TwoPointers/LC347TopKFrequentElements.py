@@ -29,32 +29,28 @@ def topKFrequent(nums: List[int], k: int) -> List[int]:
         return []
     counter = collections.Counter(nums)
     keys = list(counter.keys())
-    idx = partition(counter, keys, 0, len(keys) - 1, k) # k作为参数传下去! 返回的是分割点的下标 
-    return keys[:idx + 1] # +1因为要包含idx对应的元素 
+    partition(counter, keys, 0, len(keys) - 1, k)
+    return keys[:k] # k取不到 [0...k-1]
 
 
-def partition(counter, keys, start, end, k) -> int: # 返回分界点的index
+def partition(counter, keys, start, end, k):
     while start < end:
-        left, right = start - 1, end + 1 # [start, left) (right, end] 两个区间
-        pivot = counter[keys[(start + end) // 2]] # 注意用counter对应的值作为pivot
-        while left < right:
-            while True: # left往右走 找<=pivot的元素
+        left, right = start, end  # [start, left) (right, end] 两个区间
+        pivot = counter[keys[(start + end) // 2]] # 注意pivot是counter对应的值
+        while left <= right:
+            while left <= right and counter[keys[left]] > pivot: # 这里与pivot相比时不能取到=
                 left += 1
-                if counter[keys[left]] <= pivot:
-                    break
-            while True: # right往左走 找>=pivot的元素
+            while left <= right and counter[keys[right]] < pivot:
                 right -= 1
-                if counter[keys[right]] >= pivot:
-                    break
-            if left < right: # swap l,r对应的元素
+            if left <= right: # 注意要交换完元素 l/r需各走一步
                 keys[left], keys[right] = keys[right], keys[left]
-        
-        if k <= right - start + 1: # 分界点左边有(right-start+1)个元素
-            end = right # 接着往左边找 更新右侧边界
-        else: # k比左边元素个数多 需要往右边找
-            k -= right - start + 1 # 注意！这里要更新k 给下一次循环用
-            start = right + 1 # 更新左侧边界start
-    return start # 也可以return end
+                left += 1
+                right -= 1
+        if k >= left:
+            start = left
+        elif k <= right:
+            end = right
+        else: return # 一定要return
 
 # 变形:输入是linked list.
 class ListNode:

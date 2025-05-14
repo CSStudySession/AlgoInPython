@@ -34,7 +34,7 @@ def quick_selection(points: List[List[int]], start: int, end: int, k: int):
         left, right = start, end
         pivot = calc_dist(points[(start + end) // 2])
         while left <= right:
-            while left <= right and calc_dist(points[left]) < pivot:
+            while left <= right and calc_dist(points[left]) < pivot: # 这里与pivot相比时不能取到=
                 left += 1
             while left <= right and calc_dist(points[right]) > pivot:
                 right -= 1
