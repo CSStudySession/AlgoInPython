@@ -49,7 +49,7 @@ class MultiQueryBSTSum:
             self.prefix[i] = self.prefix[i - 1] + self.arr[i - 1]
 
     def get_range_sum(self, lo:int, hi:int) -> int:
-        if lo < hi or lo > self.arr[-1] or hi < self.arr[0]: # [lo,hi]与BST没交集
+        if lo > hi or lo > self.arr[-1] or hi < self.arr[0]: # [lo,hi]与BST没交集
             return 0
         # 找大于等于low的第一个下标
         left, right = 0, len(self.arr) - 1

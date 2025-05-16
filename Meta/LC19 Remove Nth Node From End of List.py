@@ -23,3 +23,24 @@ def remove_nth_from_end(head, n):
         slow = slow.next
     slow.next = slow.next.next
     return dummy.next
+
+'''
+variant: given a linked list, remove the kth node from the beginning.
+思路:创建dummy节点 防止删除head的情况 dummy开始走n步 停在待删除节点前面一个点
+注意code中处理一些corner cases:
+1. 循环过程中下一个是None 直接return dummy.next
+2. 待删除的节点是None 直接return dummy.next
+T(n) S(1)
+'''
+def removeIthFromBeginning(self, head, n):
+    dummy = Node()
+    dummy.next = head
+    i = dummy
+    for _ in range(n):
+        if i.next is None: # 有各种edge cases:总长度不够, n==0. 这里都能handle
+            return dummy.next
+        i = i.next
+    if i.next is None: # i停在结尾 此时不能nxt.nxt 会报错
+        return dummy.next
+    i.next = i.next.next
+    return dummy.next

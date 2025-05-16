@@ -33,6 +33,11 @@ variant: return kth missing number starting from the leftmost num of array.
 -- 对比原题是从1开始算
 另一种问题描述: given nums as a list of holidays that you can't work, and k as the num
 of days required to complete a project. find the fist day a project can be finished.
+
+关键思路: 1.如果在idx==i不缺数字 那么a[i]==a[0]+i 2.在idx之前 缺的数字个数:a[idx]-a[0]-i
+3.二分停止时 计算停止idx之前缺的数字个数missing=a[r]-a[0]-r
+  - if missing>=k:超过k个missing的 说明答案在a[r]之前 直接从a[0]往后数即可
+  - if missing<k:a[r]之前的数不够 需要从a[r]右边再数(k-missing)个 
 '''
 def findKthPosMissing(arr: list[int], k: int) -> int:
     left, right = 0, len(arr) - 1
@@ -42,10 +47,11 @@ def findKthPosMissing(arr: list[int], k: int) -> int:
             left = mid + 1
         else:
             right = mid
-    if arr[right] > right + k: # 如果right之前缺数字
-        return right + k + arr[0] - 1
+    missing = arr[right] - arr[0] - right
+    if missing >= k:  # a[right]前缺的个数>=k个
+        return arr[0] + right + k - 1 # 在前面已经有right个“真实存在”的数
     else:                      # 否则right停在arr[-1]
-        return arr[0] + right + k
+        return arr[right] + (k - missing)
 
 # test
 arr = [4,7,9,10]
