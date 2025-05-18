@@ -18,9 +18,10 @@ def calculate(s: str) -> int:
     res = 0
     sign = 1
     stack = []
+    s += '+' # 补充+ 让最后一个运算数可以加入到结果
     for ch in s:
         if ch.isdigit():
-            num = 10 * num + int(ch)
+            num = 10 * num + int(ch) # 这里是= 不是+=
         elif ch == "+":
             res += sign * num
             num = 0
@@ -40,6 +41,4 @@ def calculate(s: str) -> int:
             res += stack.pop() #pop previous res
             num = 0
             sign = 1
-    if num != 0: # 最后还有一位没有结算
-        res += sign * num
     return res

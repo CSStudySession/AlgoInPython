@@ -16,7 +16,7 @@ variant1: Given an integer array nums of possible duplicates,
 randomly output k numbers and return them as an integer array. 
 
 条件1:You cannot pick a number twice or replace an existing picked number
-with an already pickednumber in the resulting integer array.
+with an already picked number in the resulting integer array.
 
 条件2:Note that you must do this without using extra space complexity.
 Furthermore, you must write an algorithm with 0(n) runtime complexity.

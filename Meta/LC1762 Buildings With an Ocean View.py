@@ -1,7 +1,6 @@
 '''
 ocean在右边.要求返回有o view元素的下标 下标从小到大返回.
 '''
-
 '''
 solution: monotolic stack. stack存下标 下标对应元素的高度单调增 stack top的高度最小
 T: O(n)  S: O(n)
@@ -70,4 +69,37 @@ def two_side_occean_view(heights:list[int]) -> list[int]:
 
 # test
 heights = [3, 1, 4, 1, 5]
-print(two_side_occean_view(heights))
+# print(two_side_occean_view(heights))
+
+'''
+variant 3:不是看海 问每一个楼能看见几个楼 然后这个array有duplicates.
+- stack存:右侧还没被更高或等高楼挡住视线的楼下标 并且保持栈内对应的高度单调递减
+- 从右向左遍历每个下标
+  - 弹出所有比heights[i]矮的楼 因为它们既不会挡住i的视线 也不影响更远处的楼可见性
+  - 如果此时栈非空 设栈顶为j 那么i能看到j-i栋楼 否则(empty stack)能看到的就是它右边所有楼(n-i-1)
+  - 将i压入栈 以便更左侧的楼判断
+T(n) S(n)
+'''
+def visible_buildings(heights: list[int]) -> list[int]:
+    size = len(heights)
+    # res[i] = i号楼能看到的栋数
+    res = [0] * size
+    stack = []  # 存放“还没遇到更高/等高挡住视线”的建筑高度
+    # 从右往左扫
+    for i in range(size - 1, -1, -1):
+        # 弹出所有比当前矮的
+        while stack and heights[i] > heights[stack[-1]]:
+            stack.pop()
+        # 若此时栈非空 说明有一栋更高或等高的建筑挡住了更远处 但这一栋仍然可见
+        if stack:
+            res[i] = stack[-1] - i 
+        else: # 右侧所有楼都可见
+            res[i] = size - i - 1
+        # 当前下标push stack
+        stack.append(i)
+    return res
+
+b = [4, 2, 3, 1]
+b = [1,2,3,4]
+b = [1,2,2,1,1,2]
+print(visible_buildings(b))

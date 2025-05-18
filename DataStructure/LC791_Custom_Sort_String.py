@@ -37,3 +37,31 @@ def customSortString_vec(order: str, s: str) -> str:
         if ch_to_freq[i] != 0:
             ret += ch_to_freq[i] * chr(i + ord('a'))
     return ret
+
+'''
+variant: what if input has both upper and lower cases?
+1. 如果“不忽略大小写”自定义排序 没影响
+2. 如果“忽略大小写”自定义排序
+需要做预处理: 统一大小写
+ -先把order和s都.lower() 再做统计和排序
+ -排序完后 如果需要保留原始大小写形式 要再多做一次“映射回去”的工作
+'''
+# 1. 先把 s 里所有字符按 lower() 统计频次，同时记下每个原字符的列表
+def custom_sort_case_sensitive(order: str, s: str) -> str:
+    lower_freq = collections.Counter(ch.lower() for ch in s)
+    original_map = collections.defaultdict(list)
+    for ch in s:
+        original_map[ch.lower()].append(ch)
+    # 2. 按 order.lower() 排序
+    ret = []
+    for ch in order.lower():
+        while lower_freq[ch] > 0:
+            # 从 original_map 里拿出一个原形式（可能是大写也可能小写）
+            ret.append(original_map[ch].pop())
+            lower_freq[ch] -= 1
+    # 3. 剩余的也按相同方式回写
+    for ch_lower, freq in lower_freq.items():
+        while freq > 0:
+            ret.append(original_map[ch_lower].pop())
+            freq -= 1
+    return ''.join(ret)

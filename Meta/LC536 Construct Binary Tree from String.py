@@ -20,15 +20,16 @@ def str2tree(s: str) -> Optional[TreeNode]:
     stack = [root]
     idx = 0
     while idx < len(s):
+        print("idx:",idx, "s[i]: ", s[idx])
         node = stack.pop()
         if s[idx].isdigit() or s[idx] == '-': # 截取数字
             val, idx = get_num(s, idx)
             node.val = val
             if idx < len(s) and s[idx] == '(': # 数字之后的'(' 是左子树
-                if idx + 1 < len(s) and s[idx + 1] == ')': # 跳过空的左节点
-                    idx += 1
-                    continue
                 stack.append(node) # 当前节点压栈 处理完左子节点再回来
+                if idx + 1 < len(s) and s[idx + 1] == ')': # 跳过空的左节点
+                    idx += 2
+                    continue
                 node.left = TreeNode()
                 stack.append(node.left)
 
@@ -54,3 +55,6 @@ def get_num(s, idx) -> tuple:
     if is_neg: # 根据符号返回正负数
         return (-num, idx)
     return (num, idx)
+
+s = '1()(2(3())(4()))'
+print(str2tree(s))
