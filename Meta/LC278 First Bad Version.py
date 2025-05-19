@@ -4,7 +4,7 @@ T(logn) S(1)
 '''
 def firstBadVersion(self, n: int) -> int:
     if n <= 0:
-        return 
+        return
     left, right = 1, n
     while left < right:
         mid = (left + right) // 2
