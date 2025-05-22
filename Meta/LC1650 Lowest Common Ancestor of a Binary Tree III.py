@@ -12,9 +12,9 @@ class Node:
 
 # method 1. 计算两个节点的深度. 深的节点往上跳 直到两个节点深度一致. 然后两个节点同时往上跳 汇合时即为LCA
 # T: O(n)  S: O(1)
-def lowestCommonAncestor(self, p: 'Node', q: 'Node') -> 'Node':
-    p_depth = self.getDepth(p)
-    q_depth = self.getDepth(q)
+def lowestCommonAncestor(p: 'Node', q: 'Node') -> 'Node':
+    p_depth = getDepth(p)
+    q_depth = getDepth(q)
 
     # 更深的节点向上移动 直到same level
     for _ in range(p_depth - q_depth):
@@ -28,7 +28,14 @@ def lowestCommonAncestor(self, p: 'Node', q: 'Node') -> 'Node':
         q = q.parent
     return p
 
-def getDepth(self, node):
+    # followup: what if p/q can be at different trees? 如果在同一棵树上
+    # 最终的lca一定是非空且p==q, 在不同树上 一定至少有一个先走到None 或者两个一起走到None
+#    while p and q and p != q:
+#        p = p.parent
+#        q = q.parent
+#    return None if not p or not q else p
+
+def getDepth(node):
     dep = 0
     while node:
         dep += 1

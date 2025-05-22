@@ -6,10 +6,17 @@ class Node:
         self.val = val
         self.left = left
         self.right = right
-
+'''
+中序遍历整棵树（左 → 根 → 右），访问顺序就是我们链表的顺序
+使用两个指针：
+- prev 指向中序遍历中的前一个节点
+- head 指向双向链表的头节点（即最左边的节点）
+在每次遍历到一个节点时 将其与prev双向连接
+最后 将head和最后一个节点prev互相连接 形成循环结构
+解法适用于general binary tree in order, not only for BST
+T(n) S(n)
+'''
 class Solution:
-    # method 1: DFS in-order traverse a tree, get a node list. 
-    # then link each node, and link head and tail. ->need extra space O(n)
     def treeToDoublyList(self, root: 'Optional[Node]') -> 'Optional[Node]':
         if not root: return None
         

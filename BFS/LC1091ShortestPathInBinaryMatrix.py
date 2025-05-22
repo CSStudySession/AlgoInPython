@@ -119,3 +119,15 @@ def dfs(ret, tmp, grid, x, y):
 grid0 = [[0,0,0],[1,1,0],[1,1,0]]
 grid1 = [[0,1],[1,0]]
 print(oneShortestPathBinaryMatrix(grid1))
+
+'''
+some followups:
+- 如果要求路径必须经过坐标 (a, b)?
+可拆分成两段BFS (0, 0) → (a, b) 和 (a, b) → (m - 1, n - 1)
+两次BFS之间要还原被修改过的grid 或给每次BFS都用一个新的visited数组 避免互相干扰
+- 如果有k个必经坐标?
+1. 如果访问顺序已经给定 即必须按照顺序经过k个点
+把起点—> point 1, point 1 -> point 2 ... 做k+1次bfs 最后累加长度.
+2. 如果访问顺序不确定 自己挑顺序使得整条路最短
+NP-hard问题.枚举k!种顺序 对每个顺序做k+1次BFS 选最小值
+'''
