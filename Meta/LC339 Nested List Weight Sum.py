@@ -1,3 +1,4 @@
+import collections
 '''
 given a nested list of integers nestedList. Each element is either an integer or a list whose elements may also be integers or other lists.
 The depth of an integer is the number of lists that it is inside of. For example, the nested list [1,[2,2],[[3],2],1] has each integer's value set to its depth.
@@ -7,13 +8,13 @@ Input: nestedList = [[1,1],2,[1,1]]
 Output: 10
 Explanation: Four 1's at depth 2, one 2 at depth 1. 1*2 + 1*2 + 2*1 + 1*2 + 1*2 = 10.
 '''
-
+class NestedInteger:
+    pass
 '''
 解法1:bfs. say N is the total number of nested elements in input: nested list + integers.
 T: O(N)  S: O(N)
 '''
-
-def depthSum0(nestedList: List[NestedInteger]) -> int:
+def depthSum0(nestedList: list[NestedInteger]) -> int:
     if not nestedList:
         return 0
     level = 1
@@ -30,19 +31,35 @@ def depthSum0(nestedList: List[NestedInteger]) -> int:
     return ret
 
 '''
-解法1:dfs. say N is the total number of nested elements in input: nested list + integers.
+解法2:dfs. say N is the total number of nested elements in input: nested list + integers.
 T: O(N)  S: O(N) for recursive call stack. e,g, [[[[1]]]]
 '''
-def depthSum1(nestedList: List[NestedInteger]) -> int:
+def depthSum1(nestedList: list[NestedInteger]) -> int:
     if not nestedList:
         return 0
-    return self.dfs(nestedList, 1)
+    return dfs(nestedList, 1)
 
-def dfs(nestedList: List[NestedInteger], level: int) -> int:
+def dfs(nestedList: list[NestedInteger], level: int) -> int:
     ret = 0
     for item in nestedList: # 遍历的是List of NestedInteger
         if item.isInteger():
             ret += item.getInteger() * level
         else: # 不可以直接算的 用getList()取出来 递归往下传 level+1
-            ret += self.dfs(item.getList(), level + 1)
+            ret += dfs(item.getList(), level + 1)
     return ret
+
+'''
+variant: l = [1,[1,[3],1]] sum = 1*1 + 2*(1 + 3*3 + 1) = 23
+思路:dfs. 每次dfs返回时 乘上对应的level 代表这层dfs代表的整体乘level
+'''
+def dfs_deep(nestedList, level) -> int:
+    ret = 0
+    for item in nestedList:
+        if isinstance(item, int):
+            ret += item
+        else:
+            ret += dfs_deep(item, level + 1)
+    return ret * level # 注意是整体最后乘level
+
+l = [1,[1,[3],1]] # 23
+print(dfs_deep(l, 1))
