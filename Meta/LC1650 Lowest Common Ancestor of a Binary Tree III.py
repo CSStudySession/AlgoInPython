@@ -2,6 +2,7 @@
 Given two nodes of a binary tree p and q, return their lowest common ancestor (LCA).
 Each node will have a reference to its parent node. The definition for Node is below:
 note: if val type is char, the solution still holds.
+有parent 没有root.
 '''
 class Node:
     def __init__(self, val):
@@ -60,7 +61,7 @@ def lowestCommonAncestor(self, p: 'Node', q: 'Node') -> 'Node':
 
 '''
 varint:What if you were given all the nodes as a part of a vector, and no longer the root node?
-给list of nodes, nodes是乱序的.Node对象只有左右孩子指针 没有parent指针.
+给list of nodes, nodes是乱序的.Node对象只有左右孩子指针 没有parent指针, 整体没有root.
 思路:
 1. 遍历list 构造node-to-parent关系 用dict存这个关系.
 2. 利用交替指针法 两个新指针起点分别是p,q 然后沿着dict往上trace parent, 直到两指针相遇即为lca.

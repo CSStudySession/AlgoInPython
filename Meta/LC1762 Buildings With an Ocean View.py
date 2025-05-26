@@ -2,7 +2,7 @@
 ocean在右边.要求返回有o view元素的下标 下标从小到大返回.
 '''
 '''
-solution: monotolic stack. stack存下标 下标对应元素的高度单调增 stack top的高度最小
+solution: monotolic stack. stack存下标 下标对应元素的高度单调减 stack top的高度最小
 T: O(n)  S: O(n)
 '''
 def findBuildings(heights: list[int]) -> list[int]:

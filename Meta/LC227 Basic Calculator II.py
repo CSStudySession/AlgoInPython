@@ -11,7 +11,7 @@ def calculate0(s) -> int:
     if not s:
         return 0
     
-    ret, cur = 0, 0
+    ret, cur = 0, 0 # cur:running total, ret:final result
     pre_op = '+'
 
     s += '+' # 最后一个数可能会被漏掉 在s后面append一个'+' 方便计算

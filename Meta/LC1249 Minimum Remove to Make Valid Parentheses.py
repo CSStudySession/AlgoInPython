@@ -34,7 +34,7 @@ s2 = "((a))"
 s3 = "((a))))))"
 print(minRemoveToMakeValid0(s3))
 
-# meta variant1 : must do it in-place
+# meta variant1 : 输入是list且must do update in-place
 def minRemoveToMakeValid1(s: List[str]) -> List[str]:
     if not s:
         return []

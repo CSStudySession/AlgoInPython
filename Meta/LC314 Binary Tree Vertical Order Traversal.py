@@ -1,4 +1,4 @@
-
+# note compare it with 987: more variants
 from typing import Optional, List, collections
 
 class TreeNode:

@@ -3,7 +3,7 @@ from typing import List
 解法1: min heap.注意入堆操作时 有个优化!
 T: O(n*lg(k))  S:O(k)
 '''
-def findKthLargest0(nums: List[int], k: int) -> int:
+def findKthLargest0(nums: List[int], k: int) -> int: # clarify k and len(nums)的关系 是否valid etc
     if not nums:
         return 0
     heap = []
