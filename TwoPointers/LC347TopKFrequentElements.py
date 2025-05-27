@@ -1,9 +1,9 @@
 import collections
 from typing import List
-
 '''
 solution 1: 维护size为k的min-heap. 堆上的元素为tuple:(cnt, num). python heap默认按照first key排序.
 通过Counter获得(num, cnt) 然后遍历counter 构造min-heap.
+T(nlogk) S(n)
 '''
 def topKFrequent(nums: List[int], k: int) -> List[int]:
     if not nums:
@@ -24,6 +24,7 @@ def topKFrequent(nums: List[int], k: int) -> List[int]:
     return ret    # 如果需要按cnt从大到小 就reverse一下
 
 
+# avg T(n) worst(n^2)  S(1)
 def topKFrequent(nums: List[int], k: int) -> List[int]:
     if not nums:
         return []
@@ -51,6 +52,7 @@ def partition(counter, keys, start, end, k):
         elif k <= right:
             end = right
         else: return # 一定要return
+
 
 # 变形:输入是linked list.
 class ListNode:

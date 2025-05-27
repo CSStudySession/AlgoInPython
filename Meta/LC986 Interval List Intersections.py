@@ -43,3 +43,7 @@ def mergeIntervals(curr, res):
 A = [[1,5],[10,14],[16,18]]
 B = [[2,6],[8,10],[11,20]]
 print(mergeTwoIntervalList(A, B))
+
+'''
+TODO:LC OG
+'''

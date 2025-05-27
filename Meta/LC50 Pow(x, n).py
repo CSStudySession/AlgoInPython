@@ -1,5 +1,5 @@
 # method 1: iterative. time o(logn) space o(1)
-def myPow(self, x: float, n: int) -> float:
+def power_x_n(self, x: float, n: int) -> float:
     if n == 0:
         return 1
 
@@ -21,7 +21,7 @@ def myPow(self, x: float, n: int) -> float:
     return result
 
 # method2: recursive time O(logn) space O(h) at most o(logn)
-def myPow(self, x: float, n: int) -> float:
+def power_x_n_recur(self, x: float, n: int) -> float:
     if x == 0: return 0
     if x == 1: return 1
     if n == 0: return 1
