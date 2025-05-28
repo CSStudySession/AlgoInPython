@@ -1,7 +1,9 @@
 '''
 给定一个字符串数组 移除那些是其他字符串前缀的字符串 输出数组顺序要和输入顺序一致
 输入：["ab", "abc", "abcd", "b", "bc"]
-输出：["abc", "abcd", "b", "bc"] -> "ab" 是 "abc" 和 "abcd" 的前缀 需要被移除
+输出：["abcd", "bc"]
+
+clarify: 1. all valid words, no spaces? 2. no duplication wrods?
 
 思路:用Trie判断每个字符串是否是其他字符串的前缀
 具体步骤:

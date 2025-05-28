@@ -1,4 +1,5 @@
 from collections import Counter
+import collections
 '''
 1.统计字符频率 统计字符串中每个字符出现的次数
 2.判断是否可能重排 若某个字符的出现次数超过了 (len(s)+1)//2 则无法避免相邻重复 返回空字符串
@@ -60,20 +61,30 @@ def can_rearrange(x:dict[int, int]) -> bool:
 按先偶数后奇数填充
 T(n) S(n) if we count sorted()
 '''
-def construct_rearrange(x):
-    # 得到所有元素和总个数
-    items = sorted(x.items(), key=lambda kv: -kv[1])  # 按数量从大到小排序
+def construct_rearrange(x: dict[int, int]) -> list[int]:
     total = sum(x.values())
     res = [None] * total
-
-    # 当前下一个可用的位置
+    # 找出现次数最多的数字
+    max_num = None
+    max_count = 0
+    for num, count in x.items():
+        if count > max_count:
+            max_num = num
+            max_count = count
+    # 先填最多的元素
     idx = 0
-    for val, count in items:
+    for _ in range(max_count):
+        res[idx] = max_num
+        idx += 2
+    # 更新该元素剩余次数
+    x[max_num] = 0
+    # 填其他元素
+    for num, count in x.items():
         for _ in range(count):
-            res[idx] = val
-            idx += 2
             if idx >= total:
-                idx = 1  # 填完偶数位，切换到奇数位
+                idx = 1  # 偶数位填完，切换到奇数位
+            res[idx] = num
+            idx += 2
     return res
 
 '''
@@ -84,20 +95,33 @@ T(n) S(n)
 '''
 def rearrange_games(games):
     n = len(games)
-    count = Counter(games)
-    max_count = max(count.values())
-    if max_count > (n + 1) // 2:
+    count = collections.defaultdict(int)
+    max_game = None
+    max_freq = 0
+    # 统计次数并找出现最多的元素
+    for g in games:
+        count[g] += 1
+        if count[g] > max_freq:
+            max_freq = count[g]
+            max_game = g
+    if max_freq > (n + 1) // 2:
         return []
-
-    # 降序排列，每次优先处理出现最多的game
-    game_list = sorted(count.items(), key=lambda x: -x[1])
     res = [None] * n
-    i = 0  # 先填偶数位
-
-    for game, freq in game_list:
+    i = 0
+    # 先填最多的元素
+    for _ in range(max_freq):
+        res[i] = max_game
+        i += 2
+    count[max_game] = 0
+    # 再填其他元素
+    for game, freq in count.items():
         for _ in range(freq):
+            if i >= n:
+                i = 1  # 偶数位填满，转到奇数位
             res[i] = game
             i += 2
-            if i >= n:
-                i = 1  # 偶数位填满，开始填奇数位
     return res
+
+# test
+games = ['A', 'A', 'B', 'B', 'C']
+print(rearrange_games(games))

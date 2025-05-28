@@ -17,7 +17,7 @@ class Node:
 T(n) S(n)
 '''
 class Solution:
-    def treeToDoublyList(self, root: 'Optional[Node]') -> 'Optional[Node]':
+    def treeublyList(self, root: 'Optional[Node]') -> 'Optional[Node]':
         if not root: return None
         
         head, prev = [None], [None]
