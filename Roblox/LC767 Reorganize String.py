@@ -33,3 +33,71 @@ def reorganizeString(s: str) -> str:
             index += 2
             count -= 1
     return ''.join(ans)
+
+'''
+variant1: 变了说法
+给定一个映射 x->x[i] 表示数字i出现的次数 将所有这些数字排成一排 要求相邻的数字不能相同
+需要:
+1. 判断是否存在这样的排列。
+2. 如果存在，构造出一种可行排列
+要求所有算法时间复杂度为 O(N) (不能用堆)
+思路:
+某个数字的出现次数不能超过 (N+1)//2, 否则肯定没法避免相邻相同
+证明:如果一个数太多了 比如一半以上 那即使每隔一个插一次 也不够间隔开
+'''
+# 判断是否能arrange. T(n) S(1)
+def can_rearrange(x:dict[int, int]) -> bool:
+    total = sum(x.values())
+    max_count = max(x.values())
+    return max_count <= (total + 1) // 2
+
+'''
+构造一个数列
+将最多的元素先填在偶数位 0, 2, 4, ... 然后填剩下的数 偶数位填满后再填奇数位
+这样保证没有两个相同的数字相邻
+步骤：
+找出现次数最多的数字
+按先偶数后奇数填充
+T(n) S(n) if we count sorted()
+'''
+def construct_rearrange(x):
+    # 得到所有元素和总个数
+    items = sorted(x.items(), key=lambda kv: -kv[1])  # 按数量从大到小排序
+    total = sum(x.values())
+    res = [None] * total
+
+    # 当前下一个可用的位置
+    idx = 0
+    for val, count in items:
+        for _ in range(count):
+            res[idx] = val
+            idx += 2
+            if idx >= total:
+                idx = 1  # 填完偶数位，切换到奇数位
+    return res
+
+'''
+variant2: 给定一个字符串数组games 每个元素代表一种game 可能有重复
+需要重新排列这些元素 使得任意相邻的两个元素都不是同一个game
+如果无法完成这样的重排 返回空列表 [] 或空字符串 ""
+T(n) S(n)
+'''
+def rearrange_games(games):
+    n = len(games)
+    count = Counter(games)
+    max_count = max(count.values())
+    if max_count > (n + 1) // 2:
+        return []
+
+    # 降序排列，每次优先处理出现最多的game
+    game_list = sorted(count.items(), key=lambda x: -x[1])
+    res = [None] * n
+    i = 0  # 先填偶数位
+
+    for game, freq in game_list:
+        for _ in range(freq):
+            res[i] = game
+            i += 2
+            if i >= n:
+                i = 1  # 偶数位填满，开始填奇数位
+    return res

@@ -26,3 +26,20 @@ class MedianFinder:
             return (-self.max_heap[0] + self.min_heap[0]) / 2.0 
         else:
             return -self.max_heap[0]
+        
+
+'''
+这道题也是roblox面经中的
+followup: 1. 多个data steams怎么处理? 2.样本量很大/infinity data stream怎么办?
+1. 
+- 如果不能分布式:全局维护一个堆 跟原题计算一样
+- 可以分布式:
+  - 每个steam local维护堆 + local count
+  - 需要全局中位数时 把各个堆顶部分数据合并 做k-way merge
+  - 用another heap归并 找到第k/2大或者小的元素 复杂度T(k*logN) 数据分布在多机房
+- 如果不要求精确 可以接受近似值 可以用count-min-sketech等算法
+  - 各个stream统计local percentile, 然后发送到中心节点merge+估计全局分位数
+2. 
+- 数据流太大 数字无法全部保存 可以每个stream local做蓄水池采样
+  需要全局中位数时 把采样数据合并 从中计算中位数. 采样是等概率的 误差可以接受.
+'''
