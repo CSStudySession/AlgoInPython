@@ -20,7 +20,7 @@ def nextPermutation(nums: List[int]) -> None:
     nums[end_idx - 1], nums[idx - 1] = nums[idx - 1], nums[end_idx - 1]
     nums[end_idx:] = nums[end_idx:][::-1]
 
-# variant1: return revious permutation:第一个比当前值小的
+# variant1: return previous permutation:第一个比当前值小的
 def prevPermutation(nums: List[int]) -> None:
     if len(nums) < 2:
         return 
@@ -39,3 +39,5 @@ def prevPermutation(nums: List[int]) -> None:
 nums = [9,4,8,3,5,5,8,9]
 prevPermutation(nums)
 print(nums)
+
+# todo: 写注释为什么这么work

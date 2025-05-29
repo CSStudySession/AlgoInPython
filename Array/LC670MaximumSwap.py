@@ -1,5 +1,5 @@
-
 import collections
+# todo: 写注释为什么work
 def maximumSwap(num: int) -> int:
     if num < 10: # 只有一位 没得换
         return
@@ -43,4 +43,4 @@ def find_second_largest_num(num:list[int]) -> list[int]:
 num1 = [2, 7, 3, 6] # [7, 6, 2, 3]
 num2 = [1, 2, 1, 1, 1] # [1, 2, 1, 1, 1]
 num3 = [1,1,1]
-print(find_second_largest_num(num3))
+# print(find_second_largest_num(num3))
