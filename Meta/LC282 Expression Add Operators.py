@@ -5,7 +5,6 @@
         we do 1 + 2 + 3 + 4 + (- 4) + (4 * 5)
 T(4^N) 每次dfs 有四种选择, idx最大能取到N, N is len(num)
 S(N) recursion stack could take O(N), auxiliary tmp could take O(N)
-TODO: 生成两个简单用例
 '''
 
 def addOperators(num: str, target: int) -> list[str]:
@@ -28,3 +27,11 @@ def dfs(num, target, tmp, idx, prev_oprd, total, ret):
             dfs(num, target, tmp + '-' + str(cur), j + 1, -cur, total - cur, ret)
             # 乘法分支 pass给下面的操作数为:当前切出来的数(cur) * 之前传下来的数(prev_oprd)
             dfs(num, target, tmp + '*' + str(cur), j + 1, cur * prev_oprd, total - prev_oprd + prev_oprd * cur, ret)
+
+# test
+num = "123" 
+target = 6 # ['1+2+3', '1*2*3']
+
+num = "105" 
+target = 6 # ['1+0+5', '1-0+5']
+print(addOperators(num, target))
