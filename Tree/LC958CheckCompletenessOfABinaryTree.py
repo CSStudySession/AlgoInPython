@@ -1,34 +1,28 @@
-from typing import Optional
-import collections
-
+from collections import deque
 # Definition for a binary tree node.
 class TreeNode:
     def __init__(self, val=0, left=None, right=None):
         self.val = val
         self.left = left
         self.right = right
+'''
+使用一个队列进行 BFS 层序遍历 允许None节点入队 表示空子节点
+一旦遇到第一个None节点 标记seen_null=True
+如果之后还遇到非空节点 说明有节点出现在了空节点之后 不符合完全二叉树的定义 直接返回False
+如果整棵树遍历完都没有违反条件 说明是合法的 返回True
+T(n) S(n) n为节点个数
+'''
+def isCompleteTree(root) -> bool:
+    queue = deque([root])
+    seen_null = False
 
-'''
-bfs层序遍历:check valid nodes layer by layer
-思想: 每层从左到右检查 是否是"complete" 检查过程中每个节点左右孩子入队构建下一层bfs 几个小细节见代码里的注释
-注意当左右孩子为null时 也要入队!
-'''
-class Solution:
-    def isCompleteTree(self, root: Optional[TreeNode]) -> bool:
-        seen_null = False
-        queue = collections.deque([root])
-        while queue:
-            if seen_null: # 之前见过null 如果当前层还有其他非null的结点 说明一定不满足条件 直接返回false
-                          # 最后一层节点的左右null孩子 也会入队. 如果是完全二叉树 这一层都会是null
-                return not any(queue)
-            
-            for _ in range(len(queue)):
-                node = queue.popleft()
-                if not node:    # 如果当前是null 记录一下见过null 但是不能直接返回 因为可能是最后一层 后面接着判断
-                    seen_null = True
-                else:
-                    if seen_null: # 当前点不是null 之前见过null->"不complete"
-                        return False
-                    queue.append(node.left)   # 左右children入队 可以入队null
-                    queue.append(node.right)
-        return True  # 查了所有layer都没问题 返回
+    while queue:
+        node = queue.popleft()
+        if node is None:
+            seen_null = True
+        else:
+            if seen_null:
+                return False # 在见过null之后还出现了非null节点 不合法
+            queue.append(node.left)
+            queue.append(node.right)
+    return True

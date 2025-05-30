@@ -2,6 +2,15 @@ from typing import List
 '''
 A peak element is an element that is strictly greater than its neighbors. 
 You may imagine that nums[-1] = nums[n] = -∞
+
+followup: 如何提前退出?
+在每一轮判断mid是否已经是peak 即比左右都大.如果是 就可以提前退出 而不需要继续收敛到最后一个点. 改动代码如下:
+获取左、右的值，注意边界情况
+left_val = float('-inf') if mid == 0 else nums[mid - 1]
+right_val = float('-inf') if mid == len(nums) - 1 else nums[mid + 1]
+# 如果当前是peak 提前退出
+if nums[mid] > left_val and nums[mid] > right_val:
+    return mid
 '''
 def findPeakElement(nums: List[int]) -> int: # 返回peak item的index
     if len(nums) == 1:

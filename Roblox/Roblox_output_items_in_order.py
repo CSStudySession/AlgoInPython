@@ -27,6 +27,7 @@ lf dependencies are missing (not declared), there is a cycle (dependency loop), 
 使用小顶堆heap 堆中存储 (row, col, node) 自动按输入顺序处理多个入度为0的节点
 每处理一个节点 就减少其邻居的入度 如果入度为0 加入堆中
 如果存在循环依赖 拓扑排序的结果不会包含全部节点 输出 "error!"
+T(nlogn) S(n)
 '''
 def compute_loading_order(components):
     if not components:
