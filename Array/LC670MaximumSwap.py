@@ -1,5 +1,17 @@
 import collections
-# todo: 写注释为什么work
+'''思路:
+1. 从左往右找第一个“低谷”位置x 使得num_str[x] < num_str[x + 1]
+含义：找到第一个递增的地方 说明右边可能有更大的数可以换 从这个位置开始我们尝试放一个更大的数过去
+从左边找是为了尽早改变高位 高位换得越大 最终数值越大
+2. 从x之后向右扫描 找一个值最大且位置最靠后的数z (>= 当前最大 越后越好)
+含义：我们想用尽量大的数来换高位 但要保证是最优的（右侧最大且越靠后越优，以便靠前位尽可能大）
+选最靠后的位置 因为之后会换一个小的数字过去 靠后对整体影响小
+3. 从左往右找第一个比z小的位置y 交换z和y
+含义:把最大数z换到最高位(第一个比它小的位置) 产生最大数值变化
+注意只需要换一次 题目只允许swap一次
+4. 如果整个数字已经是降序排列，无法让它变大，直接返回原数
+T(N) S(N)
+'''
 def maximumSwap(num: int) -> int:
     if num < 10: # 只有一位 没得换
         return
@@ -29,7 +41,7 @@ def find_second_largest_num(num:list[int]) -> list[int]:
     counter = collections.Counter(num)
     largest = []
     for i in range(9, -1, -1):
-        for j in range(counter[i]):
+        for _ in range(counter[i]):
             largest.append(i)
     k = len(largest) - 1
     while k:
