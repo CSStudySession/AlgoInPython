@@ -24,7 +24,7 @@ def searchRange(nums: list[int], target: int) -> list[int]:
 # variant1: return the count of a given number
 # mostly same as original solution above, but return (right - left_idx + 1)
 
-# variant2: return unique number in array
+# variant2: return the count of unique numbers in array
 def count_unique_elements(nums: list[int]) -> int:
     if not nums:
         return 0

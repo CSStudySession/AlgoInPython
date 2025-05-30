@@ -5,6 +5,7 @@
         we do 1 + 2 + 3 + 4 + (- 4) + (4 * 5)
 T(4^N) 每次dfs 有四种选择, idx最大能取到N, N is len(num)
 S(N) recursion stack could take O(N), auxiliary tmp could take O(N)
+TODO: 生成两个简单用例
 '''
 
 def addOperators(num: str, target: int) -> list[str]:

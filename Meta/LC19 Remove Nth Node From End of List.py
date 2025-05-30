@@ -37,7 +37,7 @@ def removeIthFromBeginning(self, head, n):
     dummy.next = head
     i = dummy
     for _ in range(n):
-        if i.next is None: # 有各种edge cases:总长度不够, n==0. 这里都能handle
+        if i.next is None: # 有各种edge cases:总长度不够
             return dummy.next
         i = i.next
     if i.next is None: # i停在结尾 此时不能nxt.nxt 会报错

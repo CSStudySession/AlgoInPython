@@ -7,7 +7,7 @@ class TreeNode:
         self.right = right
 
 # OG. T(k * N/klogN/k) + O(N) = O(NlogN/k), k:number of columns, O(N) for tree traversal
-def verticalTraversal(root: Optional[TreeNode]) -> List[List[int]]:
+def verticalTraversal_sort(root: Optional[TreeNode]) -> List[List[int]]:
     if not root:
         return [[]]
     col_to_val = collections.defaultdict(list) # dict的值:list of tuple

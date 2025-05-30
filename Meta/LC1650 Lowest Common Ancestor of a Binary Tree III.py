@@ -88,3 +88,14 @@ def find_lca_given_list_node(nodes:list[Node], p:Node, q:Node) -> Node:
         else:
             cur_q = p
     return cur_p
+
+'''
+证明交替指针方法可以跳到LCA收敛
+设从 p 到 LCA 的路径长度为 dp 从 q 到 LCA 的为 dq
+指针 cur_p 走的路径是 p -> ... -> root (切换到 q) -> q -> ... -> LCA
+共走了 dp + dq 步
+指针 cur_q 走的路径是 q -> ... -> root (切换到 p) -> p -> ... -> LCA
+共走了 dq + dp 步
+二者走的路径长度完全一致 且在路径后半部分都经过了LCA
+只要两个指针按照这个策略走 总会在某一个时间步同时走到LCA
+'''

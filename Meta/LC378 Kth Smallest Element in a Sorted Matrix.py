@@ -6,21 +6,20 @@
  -- 如果个数>=k 说明mid可能是答案 但还可以尝试继续二分更小的 right=mid
 T(nlog(max - min)) S(1)
 '''
-
-def kthSmallest(self, matrix: list[list[int]], k: int) -> int:
+def kthSmallest(matrix: list[list[int]], k: int) -> int:
     if not matrix:
         return -1
     left, right = matrix[0][0], matrix[-1][-1]
     while left < right:
         mid = (left + right) // 2
-        cnt = self.count_num(mid, matrix)
+        cnt = count_num(mid, matrix)
         if cnt >= k:
             right = mid
         else:
             left = mid + 1
     return right
 
-def count_num(self, mid, matrix):
+def count_num(mid, matrix):
     i, j = len(matrix) - 1, 0
     cnt = 0
     while i >= 0 and j < len(matrix[0]):
