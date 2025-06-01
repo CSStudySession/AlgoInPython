@@ -1,4 +1,4 @@
-
+#TODO: return a list of course
 import collections
 # 拓扑排序 T(N + E)  S(N)
 def canFinish(numCourses: int, prerequisites: list[list[int]]) -> bool:

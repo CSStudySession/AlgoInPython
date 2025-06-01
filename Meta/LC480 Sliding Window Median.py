@@ -14,7 +14,7 @@ Examples:
 (min_heap will have two less elements)
 3. Based on this - it is enough for us to move 1 element from one heap to another 
 when the balance variable is equal to 2 or -2
-T(n*log(k))  S(k)
+T(n*log(n)) worst case if nums is sorted  S(n)
 '''
 def medianSlidingWindow(nums: list[int], k: int) -> list[float]:
     min_heap, max_heap = [], []

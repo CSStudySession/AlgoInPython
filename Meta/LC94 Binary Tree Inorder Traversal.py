@@ -46,7 +46,12 @@ variant:
 Given a Binary Tree and an input array. 
 The task is to create an Iterator that utilizes next() and hasNext() functions 
 to perform Inorder traversal on the binary tree.
-思路与上面的method2一样
+思路: 用栈来模拟中序遍历过程 left root right
+每次next()调用:
+- 从栈中弹出当前节点（即当前要访问的节点）
+- 如果该节点有右子树 将右子树的左链路径压入栈中（即再走一段“左到底”的过程）
+T(1) amertized, worst T(h) for a node with left path length h.
+S(h) worst case would be n 
 ''' 
 class InorderIterator:
     def __init__(self, root:TreeNode):

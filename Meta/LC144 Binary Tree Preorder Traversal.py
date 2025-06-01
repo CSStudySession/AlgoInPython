@@ -38,7 +38,13 @@ variant:
 Given a Binary Tree and an input array. 
 The task is to create an Iterator that utilizes next() and hasNext() functions 
 to perform pre-order traversal on the binary tree.
-思路与上面的method2一样
+
+思路：
+访问顺序：根 -> 左 -> 右
+使用一个栈 stack 保存待访问的节点。
+初始化时将 root 入栈
+next() 时弹出栈顶节点作为当前节点 并按顺序将其右孩子先入栈 再将左孩子入栈 保证左子树先被访问
+hasNext() 判断栈是否为空
 '''
 class PreorderIterator:
     def __init__(self, root: TreeNode):

@@ -4,6 +4,19 @@ from typing import collections
 # last()返回most recent used value if there's.
 # get, put, del run O(1) average, last runs O(1)
 # no capacity requiement: no limitation on capacity
+'''
+思路:
+用双向链Doubly Linked List + 哈希表dict 组合结构 实现常数时间的插入 删除与访问
+- 哈希表 val_to_ref
+key: 缓存中的键
+value: 对应链表中的 Node 引用
+用于 O(1) 时间内定位链表中的节点。
+- 双向链表 head <-> ... <-> tail
+维护节点的使用顺序
+最近使用的节点放在链表尾部 tail.prev
+旧的节点在前部
+链表的移动操作实现了“最近使用”更新
+'''
 class Node:
     def __init__(self, key, value):
         self.key = key
@@ -17,13 +30,13 @@ class LRU_cache_v1:
         self.head.next = self.tail
         self.tail.prev = self.head
         self.val_to_ref = collections.defaultdict(Node)
-    
+    # 从链表中移除指定节点（更新其前后指针）
     def reconnect_nodes(self, node: Node): # helper func
         prev = node.prev
         next = node.next
         prev.next = next
         next.prev = prev
-
+    # 将某节点插入链表尾部（表示“最近使用”）
     def move_to_end(self, node: Node):
         before = self.tail.prev
         before.next = node
@@ -112,7 +125,3 @@ class LRUCache:
     def remove(self, node):
         node.prev.next = node.next
         node.next.prev = node.prev
-
-'''
-TODO: 加注释！
-'''
