@@ -11,6 +11,25 @@ class Solution:
         indexList = self.dict[target]
         return random.choice(indexList) # Return a random element from the non-empty indexList. If indexList is empty, raises IndexError.
 
+# followup: O(1) space. 
+'''
+思路:reservoir sampling
+遍历数组 在遍历过程中 只关注值为target的元素
+设已经看到的第count个target值的位置是i
+以概率1/count选择当前下标i. 最终返回被选中的下标.
+T(n) S(1)
+'''
+def pick_random_index(nums: List[int], target: int) -> int:
+    count = 0
+    res = -1
+    for i in range(len(nums)):
+        if nums[i] == target:
+            count += 1
+            # 以1/count的概率选当前下标
+            if random.randint(1, count) == 1:
+                res = i
+    return res
+
 '''注意下面的约束条件 主动问 可能不会直接给出
 variant1: Given an integer array nums of possible duplicates, 
 randomly output k numbers and return them as an integer array. 

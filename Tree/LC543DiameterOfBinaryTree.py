@@ -25,7 +25,43 @@ def maxHeight(root, ret) -> int:
     ret[0] = max(ret[0], left_ret + right_ret) # 注意这里没有+1.只是left+right 定义中length是按edge算 不是按nodes算
 
     return max(left_ret, right_ret) + 1 # 这里要+1.左右取较大的 加上自己返回
-    
+
+'''
+followup: return longest diameter path
+思路: 使用DFS后序遍历 在每个节点处计算:
+- 当前节点左子树的最大高度 left_height
+- 当前节点右子树的最大高度 right_height
+- 以当前节点为中心的路径长度为 left_height + right_height
+- 维护全局最大直径
+  - 用一个引用变量 diameter[0] 记录全局最大直径值 当某个节点的left + right 超过当前最大值时 更新它
+- DFS返回每个节点向下的最长路径(用于拼接) 同时通过best_path[0]存储历史上的最长路径
+T(n) S(h), worst n
+'''
+def diameterOfBinaryTreeWithPath(root: Optional[TreeNode]) -> list[int]:
+    diameter = [0]
+    best_path = [[]]  # 用 list 包住 path 作为引用传递
+    dfs(root, diameter, best_path)
+    return best_path[0]
+
+def dfs(node: Optional[TreeNode], diameter, best_path_holder) -> tuple[int, list[int]]:
+    if not node:
+        return 0, []
+    # 左子树
+    left_height, left_path = dfs(node.left, diameter, best_path_holder)
+    # 右子树
+    right_height, right_path = dfs(node.right, diameter, best_path_holder)
+
+    # 如果当前节点能更新最大直径，更新 diameter 和 best_path_holder
+    if left_height + right_height > diameter[0]:
+        diameter[0] = left_height + right_height
+        best_path_holder[0] = left_path[::-1] + [node.val] + right_path
+
+    # 返回当前节点向下的最长路径（给父节点接）
+    if left_height > right_height:
+        return left_height + 1, left_path + [node.val]
+    else:
+        return right_height + 1, right_path + [node.val]
+
 '''
 variant: given a N-ary tree and return the diameter.
 思路: dfs with backtrack. 对node_x 设有3个chilren:

@@ -66,8 +66,8 @@ def dfs(node, target_set, ret):
     if not node:
         return 0
     # 分别统计左右子树中 target 节点的数量
-    left_count = dfs(node.left)
-    right_count = dfs(node.right)
+    left_count = dfs(node.left, target_set, ret)
+    right_count = dfs(node.right, target_set, ret)
     # 当前节点是否是 target 节点
     cur = 1 if node in target_set else 0
     # 当前节点子树包含的 target 总数

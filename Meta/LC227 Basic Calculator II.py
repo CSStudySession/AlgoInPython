@@ -6,6 +6,7 @@
     2. 如果当前ch in "+-/*", 看previous sign(op): cur此时累进计算前面的+-*/
         2.1 如果当前ch in "+-", 把cur累加到ret, cur归零
         2.2 pre_op = ch(把当前ch给pre_op, 用pre_op记录previous operator), num归零
+TODO: 用一个例子解释 同样for calc1
 '''
 def calculate0(s) -> int:
     if not s:

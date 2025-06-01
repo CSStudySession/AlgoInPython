@@ -45,3 +45,14 @@ def dfs(self, grid, x, y, dx, dy, idx) -> int:
             grid[nx][ny] = idx
             cnt += self.dfs(grid, nx, ny, dx, dy, idx)
     return cnt
+
+
+'''
+followup: 如果可以flip两个0 怎么解？
+1. precompute all connected island areas using DFS and assign each island a unique id.
+2. Then for each zero cell, compute its adjacent island set.
+3. Next, try flipping two different zero cells, and take the union of their adjacent island ids 
+to avoid double-counting areas.
+The total size is then the sum of these areas plus 2 for the two flipped zeros.
+T(m^2 * n^2)->遍历找成对的0
+'''
