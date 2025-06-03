@@ -20,10 +20,11 @@ def lowestCommonAncestor(root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'Tre
     return None
 
 '''
-variant1: given a N-ary tree. return LCA. 思路: dfs
-1. dfs构建父节点映射表(dict) 直到找到p和q.
+variant1: given a N-ary tree's root. return LCA of two given nodes. 
+思路: dfs
+1. 用dfs构建父节点映射表(dict) 建立每个节点和parent关系 直到找到p和q
 2. 用set收集p的所有祖先
-3. 沿着q的路径向上找 直到找到一个在p祖先集合中的节点 即为LCA.
+3. 沿着q的祖先路径向上找 直到找到第一个在p祖先集合中的节点 即为LCA
 '''
 class TreeNode:
     def __init__(self, val=None, children=[]):
@@ -32,8 +33,8 @@ class TreeNode:
 
 def lca_n_ary_tree(root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
     parent = {root: None} # 记录节点:parent
-    stack = [root]
-    while p not in parent or q not in parent: # 'or'确保同时找到p和q
+    stack = [root] # 用stack simulate dfs
+    while p not in parent or q not in parent: # 'or'确保建立好p和q的parent关系 两个都要建立
         node = stack.pop()
         for child in node.children:
             parent[child] = node
@@ -47,13 +48,14 @@ def lca_n_ary_tree(root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode'
     return q
 
 '''
-variant2: given a list of nodes. return LCA of them. 思路: post-order traversal
+variant2: given a binary tree root, and a list of nodes. Return LCA of the list of nodes. 
+思路: post-order traversal
 把 nodes 存入一个集合 target_set
 从根节点 root 开始做后序遍历
  - 递归遍历左右子树。
  - 判断当前节点是否是 target_set 中的节点
  - 统计当前子树中出现了多少个 target 节点。
-如果当前子树中包含所有的 k 个节点，且当前节点是第一个满足这个条件的节点，则它是 LCA。
+如果当前子树中包含所有的k个节点 且当前节点是第一个满足这个条件的节点 则它是LCA
 T(n) S(n)
 '''
 def lowestCommonAncestor(root: TreeNode, nodes: list[TreeNode]) -> TreeNode:
@@ -72,7 +74,7 @@ def dfs(node, target_set, ret):
     cur = 1 if node in target_set else 0
     # 当前节点子树包含的 target 总数
     total = left_count + right_count + cur
-    # 如果正好包含所有 target，且还未记录答案
+    # 如果正好包含所有 target 且还未记录答案
     if total == len(target_set) and not ret[0]:
         ret[0] = node
     return total

@@ -1,22 +1,23 @@
 '''
 variant: 返回一个str str为合法分割的一个组合 词中间用空格分开.
-思路:dfs+memo. dfs尝试每种切分方式 并记录每个dfs层尝试切分的结果. 
-每层找到一个可行解就返回.
+e.g.: s = "applepenapple" word_bank = ["apple","pen"]  output: 'apple pen apple'
+思路:dfs+memo. dfs尝试每种切分方式 并记录每个dfs层尝试切分的结果
+每层找到一个可行解就返回
 dfs函数:从位置start开始 对s进行DFS分词 返回可行的分词结果 (带空格)
-       - 若无解则返回空字符串
-T(n^2):n个切分起点 尝试所有end(n)  S(n^2): memo[0]:n m[1]:n-1 ... 1
+- 若无解则返回None
+T(n^2):n个切分起点 尝试所有end[start+1, n]  S(n^2): memo[0]:n m[1]:n-1 ... 1
 一共:1+2+..+n ~=S(n^2)
 '''
 def word_break(s: str, wordDict: list[str]) -> str:
     wordSet = set(wordDict)               # 将列表转为哈希集合，快速查找
     memo = [None] * (len(s) + 1)          # 记忆化数组，存储从各位置开始的分词结果
     res = dfs(s, wordSet, 0, memo)
-    return res if res is not None else ""  # None 则说明无解，返回空字符串
+    return res if res is not None else ""  # None 则说明无解 返回空字符串
 
 def dfs(s: str, wordSet: set, start: int, memo: list[str]) -> str:
     # 已经处理过start位置 直接返回结果
     if memo[start] is not None:
-        return memo[start]  
+        return memo[start]
     # 到达字符串末尾 说明前面都能成功分词
     if start == len(s):
         return ""  # 空字符串表示已经分完 不需要再加词
@@ -34,10 +35,10 @@ def dfs(s: str, wordSet: set, start: int, memo: list[str]) -> str:
     memo[start] = None
     return None
 
-#s = "leetcode"
-#word_bank = ["leet","code"]
+s = "qwerasdf"
+word_bank = ["asdf","qwer"]
 #s = "applepenapple"
 #word_bank = ["apple","pen"]
-s = "catsandog"
-word_bank = ["cats","dog","sand","and","cat"]
+#s = "catsandog"
+#word_bank = ["cats","dog","sand","and","cat"] # empty
 print(word_break(s, word_bank))

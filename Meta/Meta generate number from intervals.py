@@ -45,8 +45,14 @@ def dfs(pos, path, n, intervals, result):
         dfs(pos + 1, path, n, intervals, result)
         path.pop()
 
-# 解法2: 逐位生成 从左到右 逐个位置构造数字
-# 每一位都基于前面已构造的数字进行扩展 注意第一位不能为0 最后用set去除重复数字
+'''
+解法2: iteritive 逐位生成 从左到右 逐个位置构造数字
+每一位都基于前面已构造的数字进行扩展 注意第一位不能为0 最后用set去除重复数字
+e.g.: [[1,2],[3,4]] current_numbers = [0] 初始化
+第一次循环: [0]跟[1,2]每个数都尝试组合 -> current_numbers = [1, 2]
+第2次循环: [1, 2]跟[3,4]每个数尝试组合 -> current_numbers = [13, 14, 23, 24]
+T(2^n) S(2^n)s
+'''
 def generate_n_digit_nums_loop(intervals: list[list[int]]) -> list[int]:
     if not intervals:
         return []
@@ -54,14 +60,14 @@ def generate_n_digit_nums_loop(intervals: list[list[int]]) -> list[int]:
     current_numbers = [0]
     
     for pos, interval in enumerate(intervals):
-        next_numbers = []
-        for current_num in current_numbers:
+        next_numbers = [] # 给下一层生成用的base numbers
+        for current_num in current_numbers: # 用这层的base numbers 尝试与每个digit组合
             for digit in interval:
                 # 第一位不能为0
                 if pos == 0 and digit == 0:
                     continue
-                new_num = current_num * 10 + digit
-                next_numbers.append(new_num)
-        current_numbers = next_numbers
+                new_num = current_num * 10 + digit # 生成新number
+                next_numbers.append(new_num)  # 放到下一层的base numbers 
+        current_numbers = next_numbers # 当前interval尝试完 交换数组
     # 使用set去重
     return list(set(current_numbers))

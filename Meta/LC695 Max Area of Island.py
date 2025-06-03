@@ -18,15 +18,14 @@ def maxArea_dfs(grid: list[list[int]]) -> int:
     return max_island
 
 def dfs(grid: list[list[int]], r: int, c: int, visited: set[tuple[int, int]], rows: int, cols: int) -> int:
-    if r < 0 or r >= rows or c < 0 or c >= cols or (r, c) in visited or grid[r][c] == 0:
-        return 0
-
     visited.add((r, c))
     area = 1  # 当前格子计入面积
     # 定义四个方向：上、下、左、右
     directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
     for dr, dc in directions:
         nr, nc = r + dr, c + dc
+        if nr < 0 or nr >= rows or nc < 0 or nc >= cols or (nr, nc) in visited or grid[nr][nc] == 0:
+            continue
         area += dfs(grid, nr, nc, visited, rows, cols)
     return area
 
@@ -39,24 +38,19 @@ def maxArea_bfs(grid: list[list[int]]) -> int:
     for i in range(len(grid)):
         for j in range(len(grid[0])):
             if grid[i][j] == 1 and (i, j) not in visited:
+                area = 0
+                queue = collections.deque([(i, j)])
                 visited.add((i, j))
-                area = bfs(grid, i, j, visited)
+                while queue:
+                    cur = queue.popleft()
+                    area += 1
+                    dx = [0, 1, 0, -1]
+                    dy = [1, 0, -1, 0]
+                    for d in range(0, 4):
+                        nx = cur[0] + dx[d]
+                        ny = cur[1] + dy[d]
+                        if 0 <= nx < len(grid) and 0 <= ny < len(grid[0]) and (nx, ny) not in visited and grid[nx][ny] == 1:
+                            visited.add((nx, ny))
+                            queue.append((nx, ny))
                 maxArea = max(maxArea, area)
     return maxArea
-
-def bfs(grid, x, y, visited):
-    queue = collections.deque()
-    queue.append((x, y))
-    area = 0
-    while queue:
-        x, y = queue.popleft()
-        area += 1
-        dx = [0, 1, 0, -1]
-        dy = [1, 0, -1, 0]
-        for d in range(4):
-            newx = x + dx[d]
-            newy = y + dy[d]
-            if 0 <= newx < len(grid) and 0 <= newy < len(grid[0]) and (newx, newy) not in visited and grid[newx][newy] == 1:
-                visited.add((newx, newy))
-                queue.append((newx, newy))
-    return area

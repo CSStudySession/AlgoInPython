@@ -36,9 +36,10 @@ def all_longest_repeating_substrings(s: str) -> list:
         res = [s[start:]]
     return res
 
-s = "aabbbccdddbbbaaaaaaa"
-s = 'a'
+s = "aabbbccdddbbbaaa"
+# s = 'a'
 print(all_longest_repeating_substrings(s))
+
 
 '''
 lc orign.

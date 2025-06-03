@@ -49,7 +49,7 @@ def dfs(nestedList: list[NestedInteger], level: int) -> int:
     return ret
 
 '''
-variant: l = [1,[1,[3],1]] sum = 1*1 + 2*(1 + 3*3 + 1) = 23
+variant1: l = [1,[1,[3],1]] sum = 1*1 + 2*(1 + 3*3 + 1) = 23
 思路:dfs. 每次dfs返回时 乘上对应的level 代表这层dfs代表的整体乘level
 '''
 def dfs_deep(nestedList, level) -> int:
@@ -63,3 +63,76 @@ def dfs_deep(nestedList, level) -> int:
 
 l = [1,[1,[3],1]] # 23
 print(dfs_deep(l, 1))
+
+'''
+variant2: What if you had to define your own schema for NestedList and implement BFS / DFS?
+注意, class Object适用于下面的bfs和dfs
+bfs:使用queue按层遍历每一层对象。用 level 表示当前深度，逐层处理。
+如果元素是整数，则乘以当前层数累加到结果中；
+如果是嵌套对象 则展开其value加入队列 继续下一层
+dfs:使用递归处理嵌套结构，参数 depth 表示当前深度；
+如果是整数，乘以深度后返回
+如果是嵌套对象 递归进入其value 深度加一
+'''
+class Object:
+    def __init__(self):
+        self.value: list['Object' | int]
+
+def depth_sum_bfs(objs: list[Object]) -> int:
+    queue = collections.deque(objs)
+    level = 1
+    sum = 0
+    while queue:
+        for _ in range(len(queue)):
+            obj = queue.popleft()
+            if isinstance(obj, int):
+                sum += obj * level
+            else:
+                queue.extend(obj.value) # 把.value里的每个元素逐个加入队列 不是append()
+        level += 1
+    return sum
+
+def depth_sum_dfs(objs: list[Object]) -> int:
+    def dfs(objs, depth):
+        sum = 0
+        for obj in objs:
+            if isinstance(obj, int):
+                sum += obj * depth
+            else:
+                sum += dfs(obj.value, depth + 1)
+        return sum
+    return dfs(objs, 1)
+
+'''
+leetcode OG followup:实现接口
+'''
+class NestedInteger:
+    def __init__(self, value=None):
+        # value 可以是 int，NestedInteger 的列表，或者 None（空 list）
+        if not value:
+            self.value = []
+        elif isinstance(value, int):
+            self.value = value
+        elif isinstance(value, list):
+            self.value = value  # list of NestedInteger
+        else:
+            raise TypeError("Unsupported type")
+
+    def isInteger(self) -> bool:
+        return isinstance(self.value, int)
+
+    def getInteger(self):
+        return self.value if self.isInteger() else None
+
+    def setInteger(self, value: int):
+        self.value = value
+
+    def add(self, elem: 'NestedInteger'):
+        if self.isInteger():
+            # 转换为 list 模式
+            self.value = [elem]
+        else:
+            self.value.append(elem)
+
+    def getList(self):
+        return self.value if not self.isInteger() else None

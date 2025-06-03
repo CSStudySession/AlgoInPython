@@ -1,13 +1,21 @@
 from typing import List, collections
 '''
-solution: two pass. Pass 1: Remove all invalid ")" Pass 2: remove right most extra '('
-只有左右括号匹配 才算balanced
+思路:
+第一遍遍历（从左往右）去除所有多余的右括号 )
+用etr_open记录当前未匹配的左括号数量 每当遇到 ) 时
+- 如果没有可匹配的左括号 跳过这个 )
+- 否则减少一个未匹配的左括号etr_open-=1 并保留 )
+第二遍遍历（从左往右）
+去除多余的左括号 (
+因为第一遍没有去处理过多的 (，我们需要移除最右边多余的那几个
+最终构造结果字符串 只包含有效的括号和所有字母
+
 '''
 def minRemoveToMakeValid0(s: str) -> str:
     # Pass 1: Remove all invalid ")"
     first_pass_chars = []
-    tot_open = 0
-    etr_open = 0
+    tot_open = 0   # 总共的左括号
+    etr_open = 0   # 未match到右括号的左括号
     for c in s:
         if c == "(":
             tot_open += 1
