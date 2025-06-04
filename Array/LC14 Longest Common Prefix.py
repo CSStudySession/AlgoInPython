@@ -8,7 +8,10 @@ followup: 如果多次query LCP 怎么处理? --> 用trie. 用strs里的字符�
 from typing import List
 
 class Solution:
-    # time O(S), where S is the total lenth of all str in strs. space: O(1) 
+    '''
+    n 为字符串数组 strs 的长度（即字符串的个数）
+    m 为字符串中最短字符串的长度  -> T(m*n)  S(1)
+    '''
     def longestCommonPrefix(self, strs: List[str]) -> str:
         if not strs:
             return ""

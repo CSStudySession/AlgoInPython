@@ -12,7 +12,7 @@ def countSubstrings(s: str) -> int:
         ret += cnt1 + cnt2 # 每个i 两种情况的结果 都更新到ret
     return ret
 
-def get_pali_number(self, s, left, right) -> int:
+def get_pali_number(s, left, right) -> int:
     res = 0
     while left >= 0 and right < len(s):
         if s[left] == s[right]:

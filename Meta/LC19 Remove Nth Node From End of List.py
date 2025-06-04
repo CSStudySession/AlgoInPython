@@ -13,15 +13,19 @@ class Node:
 T(N) N is num of nodes. S(1)
 '''
 def remove_nth_from_end(head, n):
+    if not head or n <= 0: # empty head or invalid n
+        return head 
     dummy = Node(-1)
     dummy.next = head
     slow, fast = dummy, dummy
-    for _ in range(n + 1): # 走n+1步
+    for _ in range(n + 1): # fast走n+1步 如果提前到达None 说明n>len
+        if not fast: return head # n>len 返回原head
         fast = fast.next
     while fast:
         fast = fast.next
         slow = slow.next
-    slow.next = slow.next.next
+    if slow.next: # delete node
+        slow.next = slow.next.next
     return dummy.next
 
 '''
@@ -32,11 +36,13 @@ variant: given a linked list, remove the kth node from the beginning.
 2. 待删除的节点是None 直接return dummy.next
 T(n) S(1)
 '''
-def removeIthFromBeginning(self, head, n):
+def removeIthFromBeginning(head, n):
+    if not head or n <= 0:
+        return head
     dummy = Node()
     dummy.next = head
     i = dummy
-    for _ in range(n):
+    for _ in range(n-1):
         if i.next is None: # 有各种edge cases:总长度不够
             return dummy.next
         i = i.next

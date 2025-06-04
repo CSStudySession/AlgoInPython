@@ -36,19 +36,19 @@ def accountsMerge(accounts):
     # Helper structures
     email_to_id = {}  # 记录每个邮箱所属的代表账号ID
     visited = set()   # 记录访问过的邮箱
-    result = defaultdict(list)  # 存储合并后的账号ID分组
+    id_to_same = defaultdict(list)  # 存储合并后的账号ID分组
     # Perform DFS and group by connected components
     for id, emails in accounts.items():
         first_email = emails[0]
         if first_email in visited:
             same_id = email_to_id[first_email]  # 查找当前邮箱归属的代表账号
-            result[same_id].append(id)  # 当前账号属于已存在的分组
+            id_to_same[same_id].append(id)  # 当前账号属于已存在的分组
         else:
-            result[id] = []  # 当前账号作为新分组代表
+            id_to_same[id] = []  # 当前账号作为新分组代表
             dfs(adjs, email_to_id, visited, first_email, id)  # DFS归类邮箱
     # Prepare result as a list of lists
     ret = []
-    for id, same_ids in result.items():
+    for id, same_ids in id_to_same.items():
         same = [id] + same_ids  # 合并同组账号ID
         ret.append(same)
     return ret
@@ -176,7 +176,7 @@ accounts = {"A1": ['alice@yahoo.com', 'alice_1@gmail.com'],
 "A4": ['alice_2@hotmail.com'],
 "A5": ['bob@facebook.com'],
 "A6": ['carol@gmail.com']}     
-print(id_merge(accounts))
+# print(id_merge(accounts))
 
 
 # 原题. 思路:并查集 

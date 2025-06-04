@@ -15,7 +15,7 @@ val1和3之间丢了2 如果k==1 二分最终停在idx==1 缺的数字就是二�
 还有一类情况是 没有缺数字 或者说 要找的数字是在idx的右边 此时二分停止的位置指向数组最大值(也就是最靠近missing num的位置)
 这时miss num == idx+1+k, 其中idx+1是当前位置不缺数的情况下理论上的数值 需要再往右数k个得到missing num 
 '''
-def findKthPositive(self, arr: list[int], k: int) -> int:
+def findKthPositive(arr: list[int], k: int) -> int:
     left, right = 0, len(arr) - 1
     while left < right:
         mid = (left + right) // 2
@@ -49,7 +49,8 @@ def findKthPosMissing(arr: list[int], k: int) -> int:
             right = mid
     missing = arr[right] - arr[0] - right
     if missing >= k:  # a[right]前缺的个数>=k个
-        return arr[0] + right + k - 1 # 在前面已经有right个“真实存在”的数
+        return arr[0] + right + k - 1 # 从a[0]开始 跳过right个真实的数 再跳过k-1个缺的
+                                      # 来到第k个缺的
     else:                      # 否则right停在arr[-1]
         return arr[right] + (k - missing)
 

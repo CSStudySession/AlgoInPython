@@ -1,14 +1,14 @@
 import collections
-
 # lc original. 先计算s的counter 再按照order的顺序逐个append to res,最后加上剩余counter里面的
 # meta varint: given a list of char as "order" instead of str, 或者不说什么input形式,需要自己问.
+# T(m+n) S(n) n=len(s) m=len(order)
 def customSortString(order: str, s: str) -> str:
     if not order or not s:
         return ""
     ch_to_freq = collections.Counter(s)
     ret = []
-    for char in order:
-        while ch_to_freq[char] > 0:
+    for char in order: # 执行m次
+        while ch_to_freq[char] > 0: # 循环最多执行n次
             ret.append(char)
             ch_to_freq[char] -= 1
     for char, freq in ch_to_freq.items():

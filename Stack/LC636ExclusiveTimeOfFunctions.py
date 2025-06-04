@@ -1,8 +1,8 @@
-from typing import List
-# stack装ID:还没有end的logId. 
-# 每碰到start就push 并更新stack[-1]的结果.碰到end就stack.pop()并计算结果. 
+# stack装ID:还没有end的logId. 维护一个变量prev_ts来计算时间 
+# 每碰到start 先更新stack[-1]的结果 再把start对应的id push stack, 并更新prev_ts. 
+# 碰到end就stack.pop()并计算结果 注意有off by one issue. 
 # ret array记录每个id的时长
-def exclusiveTime(n: int, logs: List[str]) -> List[int]:
+def exclusiveTime(n: int, logs: list[str]) -> list[int]:
     ret = [0] * n
     stack = []
     prev_ts = 0

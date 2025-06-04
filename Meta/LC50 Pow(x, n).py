@@ -1,5 +1,5 @@
 # method 1: iterative. time o(logn) space o(1)
-def power_x_n(self, x: float, n: int) -> float:
+def power_x_n(x: float, n: int) -> float:
     if n == 0:
         return 1
 

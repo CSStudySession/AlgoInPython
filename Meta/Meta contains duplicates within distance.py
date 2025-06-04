@@ -1,11 +1,12 @@
 '''
+leetcode 219
 Given an array of ints, and a postive int k, tell if array has:
 array[i] == array[j] and |j - i| <= k
 思路:使用dict(val_idx)记录每个元素上一次出现的下标 如果某个元素再次出现 并且当前下标与上一次下标之差不超过k
 说明在距离不超过k的范围内存在重复元素 返回True 遍历完后若未找到符合条件的重复项 返回False
 T(n) S(n)
 
-如果题目没有举例k的要求 可以直接用set() 思路跟下面一样.
+如果题目没有距离k的要求 可以直接用set() 思路跟下面一样.
 '''
 def check_duplicates_within_k(nums, k) -> bool:
     val_idx = {}

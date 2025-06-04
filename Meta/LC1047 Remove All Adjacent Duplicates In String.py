@@ -31,8 +31,9 @@ def remove_all_duplicates(s:str) -> str:
 
 # followup:如何解决这种用例"aabbccba" → ""？用上面发的方法 返回"ba" 不是""
 
-# variant2: removal rule is 3 or more duplicates left-to-right.
-def remove_duplicates_by_three(s:str) -> str:
+# variant2: removal rule is 3 or more duplicates left-to-right. 
+# 与variant 1一样 只是消除的时候看stack top > 2才能消除
+def remove_all_duplicates_by_three(s:str) -> str:
     if not s:
         return  ""
     stack = []
@@ -44,21 +45,15 @@ def remove_duplicates_by_three(s:str) -> str:
             stack[-1][1] += 1
             continue
 
-        if stack[-1][1] >= 3:
-            if stack[-1][1] % 3 == 0:
-                stack.pop()
-            else:
-                stack[-1][1] = stack[-1][1] % 3
+        if stack[-1][1] > 2: # 这次>2才消除
+            stack.pop()
         if not stack or stack[-1][0] != ch:
             stack.append([ch, 1])
         elif stack[-1][0] == ch:
             stack[-1][1] += 1
 
-    if stack and stack[-1][1] >= 3: # 最后一个元素在stack上做处理
-        if stack[-1][1] % 3 == 0:
-            stack.pop()
-        else:
-            stack[-1][1] = stack[-1][1] % 3
+    if stack and stack[-1][1] > 2: # 最后一个元素在stack上做处理
+        stack.pop()
     ret = []
     for item in stack:
         ret.append(item[1] * item[0])
@@ -67,9 +62,9 @@ def remove_duplicates_by_three(s:str) -> str:
 s = "aaabbbacd" # "acd"
 s = "aabbbacd"  # "cd"
 s = "aaabbbc" # c
-s = "aaaabbbacd" # "aacd" 
-s = "abbcccbd" # "ad"
-# print(remove_duplicates_by_three(s))
+s = "aaaabbbacd" # "acd" 
+#s = "abbcccbd" # "ad"
+print(remove_all_duplicates_by_three(s))
 
 # OG below
 # 解法1: stack 注意当栈顶元素与当前元素相等时 只pop一次 满足一次只能移除两个的条件

@@ -1,6 +1,6 @@
 ''' similar question: 1424. Diagonal Traverse II 
 找规律 1.一共m+n-1条对角线. 2.方向不考虑 第k条对角线起始点(i,j):
-- k < n: (0, n)  k >= n: (k - n + 1 , n - 1)
+- k < n: (0, k)  k >= n: (k - n + 1 , n - 1)
 3.考虑方向 k%2==0时 reverse对角线遍历顺序
 T(m*n) S(1) 
 '''

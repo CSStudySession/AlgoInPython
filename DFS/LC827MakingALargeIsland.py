@@ -37,13 +37,13 @@ def largestIsland(grid: List[List[int]]) -> int:
                 ret = max(ret, cur_max)
     return ret
 
-def dfs(self, grid, x, y, dx, dy, idx) -> int:
+def dfs(grid, x, y, dx, dy, idx) -> int:
     cnt = 1
     for k in range(4):
         nx, ny = x + dx[k], y + dy[k]
         if 0 <= nx < len(grid) and 0 <= ny < len(grid[0]) and grid[nx][ny] == 1:
             grid[nx][ny] = idx
-            cnt += self.dfs(grid, nx, ny, dx, dy, idx)
+            cnt += dfs(grid, nx, ny, dx, dy, idx)
     return cnt
 
 
