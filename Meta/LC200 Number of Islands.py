@@ -1,10 +1,10 @@
 from collections import deque
 '''
 dfs or bfs通用思路 遍历二维矩阵
-每当遇到一个 '1' 就从该点出发 通过DFS或BFS 每次新发现一个未访问的 '1' 就代表找到了一个新的岛屿 更新岛屿数
-将与其相连的所有 '1' 标记为 '0'（表示已访问)
+每当遇到一个 '1' 就从该点出发 通过DFS或BFS 把所有与它相邻的1连接起来->将与其相连的所有 '1' 标记为 '0'（表示已访问)
+每次新发现一个未访问的 '1' 就代表找到了一个新的岛屿 更新岛屿数
 '''
-# T(m*n) S(min(m, n))
+# bfs T(m*n)  S(min(m, n))
 def numIslands_BFS(grid: list) -> int:
     if not grid:
         return 0

@@ -1,5 +1,12 @@
 from typing import List
+'''
+要求向右rorate or shift. 三步翻转:
+1. 整体翻转 2. 前k个翻转  2. 后n-k个翻转  写一个reverse helper 传入指针即可
 
+如果要求向左rotate? 也是三步翻转 顺序变一下:
+1. 翻转前k个  2. 翻转后n-k个  3. 整体翻转
+T(n) S(1)
+'''
 class Solution:
     def reverse(self, nums: list, start: int, end: int) -> None:
         while start <= end:

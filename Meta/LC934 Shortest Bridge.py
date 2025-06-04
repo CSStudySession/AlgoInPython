@@ -1,6 +1,6 @@
 import collections
 '''思路dfs + bfs
-1. Find the firstland的初始点 -> fist = (i, j)
+1. Find the first land的初始点 -> first = (i, j)
 2. DFS - Use first to explore Island A and store all land cells in a queue
 3. BFS - Find the shortest path from Island A cells -> Island B. 
   -- Only storing water or unvisited cells in our queue
