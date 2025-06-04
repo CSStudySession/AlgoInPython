@@ -46,7 +46,7 @@ def quickSelect_dfs(nums, k, start, end) -> int:
         quickSelect_dfs(nums, k, start, right)
     return nums[k] # 一定要return. 否则k落在等于pivot区间时 会死循环
 
-def quickSelect_iter(self, nums: List[int], k: int, start: int, end: int) -> int:
+def quickSelect_iter(nums: List[int], k: int, start: int, end: int) -> int:
     while start <= end:
         left, right = start, end
         pivot = nums[(start + end) // 2]
@@ -68,7 +68,7 @@ def quickSelect_iter(self, nums: List[int], k: int, start: int, end: int) -> int
 '''
 variant: return the kth + 1 largest num.
 解法: min heap. 注意由于k要+1 有各种corner cases! ask clarification questions:
-1. range of k? what if k+1>len(nums) can k <= 0? 2. range of length if nums? 
+1. range of k? what if k+1>len(nums) can k <= 0? 2. range of length of nums? 
 T: O(n*lg(k))  S:O(k)
 '''
 def find_K_plus_one_largest(nums: List[int], k: int) -> int:

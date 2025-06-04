@@ -16,7 +16,6 @@ def myAtoi(s: str) -> int:
     res = 0
     maxInt = 2**31 - 1  # 32位整数上限
     minInt = -2**31     # 32位整数下限
-
     start = 0 # 从0开始检查
     # 判断符号位
     if s[0] == "-":

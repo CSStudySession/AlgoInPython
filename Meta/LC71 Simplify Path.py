@@ -54,7 +54,7 @@ print(change_directory(cwd3, cd3))
 如果遇到“..”: 
 如果有stack就pop. 如果“.” or "", continue. else stack.append
 '''
-def simplifyPath(self, path: str) -> str:
+def simplifyPath(path: str) -> str:
     if not path:
         return ""
     stack = []

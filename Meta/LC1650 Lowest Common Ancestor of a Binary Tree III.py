@@ -45,7 +45,7 @@ def getDepth(node):
 
 # method 2: 用set存储p的所有parents. q向上找, 如果parent in set, 则是LCA
 # T: O(n)  S: O(n)
-def lowestCommonAncestor(self, p: 'Node', q: 'Node') -> 'Node':
+def lowestCommonAncestor(p: 'Node', q: 'Node') -> 'Node':
     if not p or not q: return None
     parentSet = set()
     while p:
@@ -61,11 +61,11 @@ def lowestCommonAncestor(self, p: 'Node', q: 'Node') -> 'Node':
 
 '''
 varint:What if you were given all the nodes as a part of a vector, and no longer the root node?
-给list of nodes, nodes是乱序的.Node对象只有左右孩子指针 没有parent指针, 整体没有root.
+给list of nodes, nodes是乱序的. Node对象只有左右孩子指针 没有parent指针, 整体没有root.
 思路:
 1. 遍历list 构造node-to-parent关系 用dict存这个关系.
 2. 利用交替指针法 两个新指针起点分别是p,q 然后沿着dict往上trace parent, 直到两指针相遇即为lca.
- - 当某个指针比如p,走到头(即root节点 不在dict中) 把p指向q “交替指针” 最终一定相遇
+ - 当某个指针比如p,走到头(即root节点的parent为None 不在dict中) 把p指向q “交替指针” 最终一定相遇
 T(n) S(n)
 '''
 def find_lca_given_list_node(nodes:list[Node], p:Node, q:Node) -> Node:

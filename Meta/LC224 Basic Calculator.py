@@ -1,4 +1,3 @@
-
 '''
 # 有加减和括号
 数字：更新 num 注意多位数字要累加 例如"12"要处理成 1*10+2=12。
@@ -12,6 +11,15 @@
 - 弹出之前保存的 sign 用来乘上当前括号内的结果。
 - 弹出之前保存的 res 加到乘好符号后的括号结果上。
 T(n) S(n)
+例子 s: 1+(2-3) 
+ch = 1: 构建数字1 
+ch = +: 处理前一个数: res+=sign*num=1 reset num=0, sign=1
+ch = (: res/sign push stack: [1(res), 1(sign)] reset res=0 and sign=1
+ch = 2: 构建数字2
+ch = -: 处理前一个数: res += sign*num=0+1*2=2 reset num=0, sign=-1(本次为-号)
+ch = 3: 构建数字3
+ch = ): 处理前一个数: res += sign*num=2+(-1)*3=-1, pop stack:sign=1, pop stack:res=1
+merge res=1+1*(-1)=0
 '''
 def calculate(s: str) -> int:
     num = 0

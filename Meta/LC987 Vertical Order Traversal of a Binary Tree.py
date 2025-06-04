@@ -7,6 +7,7 @@ class TreeNode:
         self.right = right
 
 # OG. T(k * N/klogN/k) + O(N) = O(NlogN/k), k:number of columns, O(N) for tree traversal
+# S(n) n is # of nodes
 def verticalTraversal_sort(root: Optional[TreeNode]) -> List[List[int]]:
     if not root:
         return [[]]

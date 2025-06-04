@@ -2,7 +2,7 @@
 varint: Return all the longest contiguous substrings of repeated characters. 
 If there are multiple substrings with the same maximum length, return all of them.
 输入: s = "aabbbccdddbbb"
-输出: ["bbb", "bbb"]
+输出: ["bbb", "bbb", "ddd"]
 思路:
 - 遍历字符串 记录每段连续子串 用变量max_len记录当前最长长度
 - 用一个结果列表res保存最长的子串

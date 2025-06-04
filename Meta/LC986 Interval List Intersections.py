@@ -1,6 +1,7 @@
 '''
 variant: 
-Given A and B two interval lists, A has no overlap inside A and B has no overlap inside B. Write the function to merge two interval lists, output the result with no overlap.
+Given A and B two interval lists, A has no overlap inside A and B has no overlap inside B. 
+Write the function to merge two interval lists, output the result with no overlap.
 example:
 A: [1,5], [10,14], [16,18]
 B: [2,6], [8,10], [11,20]
@@ -45,6 +46,7 @@ B = [[2,6],[8,10],[11,20]]
 print(mergeTwoIntervalList(A, B))
 
 '''
+leetcode OG
 算法思路：双指针遍历 + 交集判断
 两个指针i和j分别遍历firstList和secondList
 每次取出当前的两个区间first = firstList[i]和second = secondList[j] 判断是否有交集

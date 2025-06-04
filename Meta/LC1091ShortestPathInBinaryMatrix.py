@@ -15,7 +15,7 @@ def shortestPathBinaryMatrix(grid: List[List[int]]) -> int:
     grid[0][0] = 1 # 把走过的路变成obsticles 节省用visited
     while queue:
         step += 1 # 这里加step 之后不用加了
-        for i in range(len(queue)):
+        for _ in range(len(queue)):
             x, y = queue.popleft()
             if x == size and y == size:
                 return step
@@ -50,7 +50,7 @@ def oneShortestPathBinaryMatrix(grid: List[List[int]]) -> List[tuple[int]]:
                 while (x, y) != (0 ,0):
                     (x, y) = trace[(x, y)]
                     ret.appendleft((x, y))
-                return ret
+                return list(ret)
             for d in range(8):
                 newx = x + dx[d]
                 newy = y + dy[d]
@@ -59,6 +59,10 @@ def oneShortestPathBinaryMatrix(grid: List[List[int]]) -> List[tuple[int]]:
                     trace[(newx, newy)] = (x, y)
                     grid[newx][newy] = 1 # mark visited
     return []
+
+grid0 = [[0,0,0],[1,1,0],[1,1,0]]
+grid1 = [[0,1],[1,0]]
+print(oneShortestPathBinaryMatrix(grid0))
 
 # variant: return one shorest path. 
 # 解法2: bfs的queue中 每个元素(x,y, path_so_far) path_so_far为起点到当前点的路径
@@ -83,15 +87,48 @@ def one_shortest_path(grid: List[List[int]]) -> List[tuple[int]]:
                 newx = x + dx[d]
                 newy = y + dy[d]
                 if 0 <= newx <= size and 0 <= newy <= size and grid[newx][newy] == 0:
-                    queue.append((newx, newy, path + (newx, newy))) # 注意不能用extend()
+                    queue.append((newx, newy, path + [(newx, newy)])) # 注意不能用extend()
                     grid[newx][newy] = 1 # mark visited
     return []
 
 # variant: return any one path, not necessary shorest. 
-# 解法:DFS.
+# 解法:bfs 跟返回shorest一样 比用dfs的好处 时间复杂度更稳定T(m*n) S(m*n)
+# 这个解法用的是bfs每个状态带着path探索 也可以用上面的parent dict回溯路径的方法
+def one_path_bfs(grid: List[List[int]]) -> List[tuple[int]]:
+    size = len(grid) - 1
+    if grid[0][0] == 1 or grid[size][size] == 1:
+        return []
+    if len(grid) == 1: # n * n 只有1个格子
+        return [(0, 0)]
+    
+    dx = [0, 1, 0, -1, 1, 1, -1, -1]
+    dy = [1, 0, -1, 0, 1, -1, 1, -1]
+    queue = collections.deque([(0, 0, [(0,0)])])
+    grid[0][0] = 1 # 把走过的路变成obsticles 节省用visited
+    while queue:
+        for _ in range(len(queue)):
+            x, y, path = queue.popleft()
+            if x == size and y == size:
+                return path
+            for d in range(8):
+                newx = x + dx[d]
+                newy = y + dy[d]
+                if 0 <= newx <= size and 0 <= newy <= size and grid[newx][newy] == 0:
+                    queue.append((newx, newy, path + [(newx, newy)])) # 注意不能用extend()
+                    grid[newx][newy] = 1 # mark visited
+    return []
+
+# test
+grid0 = [[0,0,0],[1,1,0],[1,1,0]]
+grid1 = [[0,1],[1,0]]
+# print(one_path_bfs(grid0))
+
+# DFS返回任意一条path. 时间复杂度不好估计 虽然加入了earily return and pruning, 
+# 最差情况(8^(m*n)) 每个点有8个方向探索 但实际会比这个小. S(m*n)
+
 def onePathBinaryMatrix(grid: List[List[int]]) -> List[tuple[int]]:
     if not grid or grid[0][0] != 0 or grid[len(grid) - 1][len(grid[0]) - 1] != 0:
-        return -1
+        return []
     tmp = [(0,0)]
     ret = []
     grid[0][0] = 1
@@ -100,10 +137,10 @@ def onePathBinaryMatrix(grid: List[List[int]]) -> List[tuple[int]]:
     
 def dfs(ret, tmp, grid, x, y):
     if len(ret) > 0: # 找到一个解
-        return
+        return True
     if x == len(grid) - 1 and y == len(grid[0]) - 1:
         ret.append(tmp[:]) # 这里要深拷贝
-        return
+        return True
     
     dx = [0, 1, 0, -1, 1, 1, -1, -1]
     dy = [1, 0, -1, 0, -1, 1, 1, -1]
@@ -112,13 +149,15 @@ def dfs(ret, tmp, grid, x, y):
         if 0 <= nx <= len(grid) - 1 and 0 <= ny <= len(grid[0]) - 1 and grid[nx][ny] == 0:
             grid[nx][ny] = 1 # mark visted
             tmp.append((nx, ny)) # add trace
-            dfs(ret, tmp, grid, nx, ny)
+            if dfs(ret, tmp, grid, nx, ny):
+                return True
             tmp.pop()  # restore status
             grid[nx][ny] = 0
+    return False
 
 grid0 = [[0,0,0],[1,1,0],[1,1,0]]
 grid1 = [[0,1],[1,0]]
-print(oneShortestPathBinaryMatrix(grid1))
+# print(oneShortestPathBinaryMatrix(grid1))
 
 '''
 some followups:

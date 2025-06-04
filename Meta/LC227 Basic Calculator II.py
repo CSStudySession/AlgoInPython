@@ -6,7 +6,17 @@
     2. 如果当前ch in "+-/*", 看previous sign(op): cur此时累进计算前面的+-*/
         2.1 如果当前ch in "+-", 把cur累加到ret, cur归零
         2.2 pre_op = ch(把当前ch给pre_op, 用pre_op记录previous operator), num归零
-TODO: 用一个例子解释 同样for calc1
+
+        例子: s:1+2*3  ret=cur=0, p_op='+' num=0
+ch=1:截取数字1 num=1
+ch=+: 计算之前的结果 p_op(+) -> cur+=num=1;ch is'+'可更新最终答案:ret+=cur=1 reset cur=0
+      update p_op=ch='+' reset num=0
+ch=2: 截取数字2 num=2
+ch=*: 计算之前的结果 p_op(+) -> cur+=num=2 ch is not(+ or -) 不更新答案
+      update p_op=ch='*' reset num=0
+ch=3: 截取数字3 num=3
+ch=+: 计算之前的结果 p_op(*) -> cur*=num=2*3=6  ch is (+) 更新答案 ret+=cur=1+6=7 reset cur=0
+      update p_op=ch='+' reset num=0  
 '''
 def calculate0(s) -> int:
     if not s:

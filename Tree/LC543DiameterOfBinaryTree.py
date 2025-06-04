@@ -54,7 +54,7 @@ def dfs(node: Optional[TreeNode], diameter, best_path_holder) -> tuple[int, list
     # 如果当前节点能更新最大直径，更新 diameter 和 best_path_holder
     if left_height + right_height > diameter[0]:
         diameter[0] = left_height + right_height
-        best_path_holder[0] = left_path[::-1] + [node.val] + right_path
+        best_path_holder[0] = left_path + [node.val] + right_path
 
     # 返回当前节点向下的最长路径（给父节点接）
     if left_height > right_height:
