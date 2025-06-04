@@ -91,41 +91,9 @@ def one_shortest_path(grid: List[List[int]]) -> List[tuple[int]]:
                     grid[newx][newy] = 1 # mark visited
     return []
 
-# variant: return any one path, not necessary shorest. 
-# 解法:bfs 跟返回shorest一样 比用dfs的好处 时间复杂度更稳定T(m*n) S(m*n)
-# 这个解法用的是bfs每个状态带着path探索 也可以用上面的parent dict回溯路径的方法
-def one_path_bfs(grid: List[List[int]]) -> List[tuple[int]]:
-    size = len(grid) - 1
-    if grid[0][0] == 1 or grid[size][size] == 1:
-        return []
-    if len(grid) == 1: # n * n 只有1个格子
-        return [(0, 0)]
-    
-    dx = [0, 1, 0, -1, 1, 1, -1, -1]
-    dy = [1, 0, -1, 0, 1, -1, 1, -1]
-    queue = collections.deque([(0, 0, [(0,0)])])
-    grid[0][0] = 1 # 把走过的路变成obsticles 节省用visited
-    while queue:
-        for _ in range(len(queue)):
-            x, y, path = queue.popleft()
-            if x == size and y == size:
-                return path
-            for d in range(8):
-                newx = x + dx[d]
-                newy = y + dy[d]
-                if 0 <= newx <= size and 0 <= newy <= size and grid[newx][newy] == 0:
-                    queue.append((newx, newy, path + [(newx, newy)])) # 注意不能用extend()
-                    grid[newx][newy] = 1 # mark visited
-    return []
-
-# test
-grid0 = [[0,0,0],[1,1,0],[1,1,0]]
-grid1 = [[0,1],[1,0]]
-# print(one_path_bfs(grid0))
-
-# DFS返回任意一条path. 时间复杂度不好估计 虽然加入了earily return and pruning, 
-# 最差情况(8^(m*n)) 每个点有8个方向探索 但实际会比这个小. S(m*n)
-
+# variant: return any one path, not necessary shorest.
+# DFS返回任意一条path. 由于每个cell只会被访问1次 这里不需要回溯时候reset grid visited status
+# T(m*n) S(m*n)
 def onePathBinaryMatrix(grid: List[List[int]]) -> List[tuple[int]]:
     if not grid or grid[0][0] != 0 or grid[len(grid) - 1][len(grid[0]) - 1] != 0:
         return []
@@ -151,13 +119,12 @@ def dfs(ret, tmp, grid, x, y):
             tmp.append((nx, ny)) # add trace
             if dfs(ret, tmp, grid, nx, ny):
                 return True
-            tmp.pop()  # restore status
-            grid[nx][ny] = 0
+            tmp.pop()  # restore tmp path status. 注意不要reset grid访问状态 每个状态只需要被访问到一次
     return False
 
 grid0 = [[0,0,0],[1,1,0],[1,1,0]]
 grid1 = [[0,1],[1,0]]
-# print(oneShortestPathBinaryMatrix(grid1))
+print(onePathBinaryMatrix(grid0))
 
 '''
 some followups:

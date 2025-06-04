@@ -10,6 +10,7 @@ T(m*n) S(m*n)
 class Mouse:
     def __init__(self):
         pass
+    # The move(Direction) will move the mouse regardless of whether you can or not
     def move(self, direction, i, j) -> bool:
         pass
     def has_cheese(self, i, j) -> bool:
@@ -24,7 +25,7 @@ class Mouse:
     def dfs(self, i, j, directions, reverse_directions, visited) -> bool:
         if self.has_cheese(i, j):
             return True
-        
+        visited.add((i, j)) # 进入dfs先add visited
         for k in range(directions):
             ni = i + directions[k][0]
             nj = j + directions[k][1]
@@ -33,7 +34,6 @@ class Mouse:
             if not self.move(directions[k], i, j): # 不能走的格子 要手动退回来
                 self.move(reverse_directions[k], i, j)
                 continue
-            visited.add((ni, nj))
             if self.dfs(ni, nj, directions, reverse_directions, visited):
                 return True
             self.move(reverse_directions[k], i, j) # dfs后回溯一步
