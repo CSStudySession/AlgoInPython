@@ -21,7 +21,7 @@ def findDiagonalOrder(nums: list[list[int]]) -> list[int]:
     return ret
 
 '''
-variant1: anti-diagonal traversal and return a list of list by levels.
+variant1: anti-diagonal traversal and return a list of list by levels. 从右上到左下
 注意matrix可能不完整!不是m*n都有数字
 思路: bfs 列优先. 画图看 把矩阵顺时针旋转45度 
 每次先把下列的元素先入队 当行坐标j==0时,再把下一行(i+1,j)入队

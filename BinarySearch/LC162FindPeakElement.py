@@ -54,7 +54,35 @@ nums = [5,2,3,1,6] # 3
 # print(find_vally_element(nums))
 
 '''
-variant2: find a peak element. assume:nums[-1] = nums[n] = -inf, allow duplicates(nums[i] == nums[i+1])
+variant2: find local minium. nums could have duplicates. local minium比较可以取到等号: a >= b <= c, b可以是答案
+
+'''
+def find_local_min(nums):
+    if not nums:
+        return None
+    n = len(nums)
+    if n == 1:
+        return nums[0]
+    
+    left, right = 0, n - 1
+    while left < right:
+        mid = (left + right) // 2
+        if nums[mid] >= nums[mid + 1]:
+            left = mid + 1
+        elif mid == 0 or nums[mid] <= nums[mid - 1]: # 过了第一个if 说明比右边小
+            return mid
+        else:
+            right = mid - 1 # 往左边search
+    return left
+
+# test cases
+nums = [5,5,5] # 5
+nums = [1,2,3] # 1
+nums = [5,5,4] # 5 or 4
+nums = [2] # 2
+
+'''
+variant3: find a peak element. assume:nums[-1] = nums[n] = -inf, allow duplicates(nums[i] == nums[i+1])
 and peak is defined as a <= peak >= b. (if peak is defined as a < peak > b, code logic still holds.)
 思路:由于输入数组允许重复元素 更准确的讲 相邻元素可能相等 所以二分会失效 因为不知道舍弃哪一边 可以用线性扫描做
 T(n) S(1)
@@ -73,7 +101,7 @@ nums = [4,4,2,7,6,6,1]
 #print(find_peak_element_with_dups(nums))
 
 '''
-variant3:find either a Valley or Even Terrain (a triplet being equal). return any one of index.
+variant4:find either a Valley or Even Terrain (a triplet being equal). return any one of index.
 要点:数组允许重复元素(nums[i]可能等于nums[i+1]) 寻找一个valley或者三个等长的位置
 由于相邻元素可能相等 无法二分 线性扫描
 T(n) S(1)
