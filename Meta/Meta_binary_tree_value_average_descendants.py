@@ -1,7 +1,7 @@
 '''
 Given a binary tree node,return True if every node's value 
 is equal to the floor of the average of its descendants (excluding itself).
-思路:使用 DFS Post-order Traversal
+思路:用 DFS Post-order Traversal
 每个节点从子节点收集:
 所有子孙节点的总和 descendant_sum
 所有子孙节点的数量 descendant_count

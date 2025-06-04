@@ -7,7 +7,7 @@
 溢出处理：结果若超过 32 位整数范围，则按上/下界截断返回。
 T(n) S(1)
 '''
-def myAtoi(self, s: str) -> int:
+def myAtoi(s: str) -> int:
     # 去除前后空格
     s = s.strip()
     if not s:
