@@ -5,7 +5,7 @@ class Node:
         self.val = val
         self.neighbors = neighbors if neighbors is not None else []
 '''
-1. 用bfs OG graph,过程中copy nodes.用dict{old:new}记录映射关系.dict的key可以当作visted用. 
+1. bfs on OG graph, 过程中copy nodes.用dict{old:new}记录映射关系. dict的key可以当作visted用. 
 2. 遍历dict的keys(也就是old nodes) 通过旧节点和邻居的关系 建立新节点和邻居的关系. 
 '''
 def cloneGraph(node: Optional['Node']) -> Optional['Node']:

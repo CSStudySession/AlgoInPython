@@ -44,7 +44,7 @@ print(get_missing_ranges(nums, lower, upper))
 
 '''
 OG. 思路:
-遍历数组 比较相邻两个数字之间的差距 若差距大于1 则说明中间有缺失的数:可能是单个数字货区间
+遍历数组 比较相邻两个数字之间的差距 若差距大于1 则说明中间有缺失的数:可能是单个数字or区间
 1. 把upper+1 append到nums末尾 避免特判
 2. 定义一个cur_lower 初始值为lower 每次循环结束前 更新它为nums[i] + 1,这样统一判断逻辑:
   -- if nums[i] - cur_lower >=1 (>=1是因为cur_lower可以取到 可能是missing num)

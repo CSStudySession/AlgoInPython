@@ -9,7 +9,7 @@ class TreeNode:
 
 # 指针从root开始遍历, 逐个比较 不断更新res 注意diff相等的时候需要取小的值
 # T(h), where h is height of tree and worst case is N. S(1)
-def closestValue(root: Optional[TreeNode], target: float) -> int:
+def closestValue(root: Optional[TreeNode], target: float) -> float:
     ret = root.val
     while root:
         if root.val == target: return root.val

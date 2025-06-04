@@ -32,7 +32,7 @@ def search(nums: list[int], target: int) -> int:
     return -1 # 找不到 返回-1
 
 '''
-followup: 数组元素有重复. leetcode 81
+followup: 数组元素有重复. leetcode 81 search rotated sorted array II
 二分查找：初始化 left = 0, right = len(nums)-1 每次取 mid = (left + right) // 2。
 若找到目标，立即返回 True。
 遇到重复元素时特殊处理：

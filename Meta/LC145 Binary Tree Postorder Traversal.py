@@ -30,4 +30,4 @@ class PostorderIterator:
                     # 否则可以访问当前节点
                     self.last_visited = self.stack.pop()
                     return self.last_visited
-        raise Exception("No more elements")
+        raise ValueError("No more elements")

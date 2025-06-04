@@ -59,17 +59,17 @@ class InorderIterator:
         self.moveLeft(root)
  
     def moveLeft(self, current:TreeNode):
-        while current != None:
+        while current:
             self.traversal.append(current)
             current = current.left
  
     def hasNext(self):
-        return len(self.traversal) > 0
+        return True if self.traversal else False
  
     def next(self):
         if not self.hasNext():
-            raise Exception('No such element Exists')
+            raise ValueError("no values")
         current = self.traversal.pop()
-        if current.right != None:
+        if current.right:
             self.moveLeft(current.right)
         return current
