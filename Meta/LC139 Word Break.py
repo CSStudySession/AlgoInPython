@@ -36,7 +36,7 @@ def dfs(s: str, wordSet: set, start: int, memo: list[str]) -> str:
     return None
 
 s = "qwerasdf"
-word_bank = ["asdf","qwer"]
+word_bank = ["asdf","qwer", "dfgerhhe"]
 #s = "applepenapple"
 #word_bank = ["apple","pen"]
 #s = "catsandog"
