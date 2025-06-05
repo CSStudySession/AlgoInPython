@@ -55,7 +55,7 @@ nums = [5,2,3,1,6] # 3
 
 '''
 variant2: find local minium. nums could have duplicates. local minium比较可以取到等号: a >= b <= c, b可以是答案
-
+T(logn) S(1)
 '''
 def find_local_min(nums):
     if not nums:
