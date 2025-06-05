@@ -18,17 +18,17 @@ e.g.
 每次趋势改变时，计数器加一
 T(n)  S(1)
 '''
-def count_monotonic_subarrays(arr: list[int]) -> int:
-    if not arr:
+def count_monotonic_subarrays(nums: list[int]) -> int:
+    if not nums:
         return 0
     increasing = None  # 当前趋势：None / True(上升) / False(下降)
     cnt = 0
-    for i in range(1, len(arr)):
-        if arr[i] > arr[i - 1]:
+    for i in range(1, len(nums)):
+        if nums[i] > nums[i - 1]:
             if increasing is None or increasing is False:
                 increasing = True
                 cnt += 1
-        elif arr[i] < arr[i - 1]:
+        elif nums[i] < nums[i - 1]:
             if increasing is None or increasing is True:
                 increasing = False
                 cnt += 1
