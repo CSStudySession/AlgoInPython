@@ -56,7 +56,7 @@ variant2: given a binary tree root, and a list of nodes. Return LCA of the list 
  - 判断当前节点是否是 target_set 中的节点
  - 统计当前子树中出现了多少个 target 节点。
 如果当前子树中包含所有的k个节点 且当前节点是第一个满足这个条件的节点 则它是LCA
-T(n) S(n)
+T(n) S(h + m) h worst n, m is size of set(nodes) a.k.a. len(target_set)
 '''
 def lowestCommonAncestor(root: TreeNode, nodes: list[TreeNode]) -> TreeNode:
     target_set = set(nodes)
