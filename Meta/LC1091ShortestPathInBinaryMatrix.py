@@ -1,6 +1,6 @@
 from typing import List, collections
 
-# 解法1: bfs. 直接修改输入 优化空间复杂度. T(m*n) S(n*n) 每个格子最多处理1次
+# leetcode OG bfs. 直接修改输入 优化空间复杂度. T(m*n) S(n*n) 每个格子最多处理1次
 def shortestPathBinaryMatrix(grid: List[List[int]]) -> int:
     size = len(grid) - 1
     if grid[0][0] == 1 or grid[size][size] == 1:
@@ -27,7 +27,7 @@ def shortestPathBinaryMatrix(grid: List[List[int]]) -> int:
                     grid[newx][newy] = 1 # mark visited
     return -1
 
-# variant: return one shorest path. 
+# variant1: return one shorest path. 
 # 解法1: bfs的过程中 用dict[(nx, ny)] = (x, y)表示从(x,y)走到的(nx,ny). 在终点back trace回去.
 def oneShortestPathBinaryMatrix(grid: List[List[int]]) -> List[tuple[int]]:
     size = len(grid) - 1
@@ -64,7 +64,7 @@ grid0 = [[0,0,0],[1,1,0],[1,1,0]]
 grid1 = [[0,1],[1,0]]
 print(oneShortestPathBinaryMatrix(grid0))
 
-# variant: return one shorest path. 
+# variant1: return one shorest path. 
 # 解法2: bfs的queue中 每个元素(x,y, path_so_far) path_so_far为起点到当前点的路径
 # 这样空间复杂度与bfs一样
 def one_shortest_path(grid: List[List[int]]) -> List[tuple[int]]:
@@ -91,7 +91,7 @@ def one_shortest_path(grid: List[List[int]]) -> List[tuple[int]]:
                     grid[newx][newy] = 1 # mark visited
     return []
 
-# variant: return any one path, not necessary shorest.
+# variant2: return any one path, not necessary shorest.
 # DFS返回任意一条path. 由于每个cell只会被访问1次 这里不需要回溯时候reset grid visited status
 # T(m*n) S(m*n)
 def onePathBinaryMatrix(grid: List[List[int]]) -> List[tuple[int]]:
@@ -139,7 +139,7 @@ NP-hard问题.枚举k!种顺序 对每个顺序做k+1次BFS 选最小值
 '''
 
 '''
-variant: return the number of possible unique paths 
+variant3: return the number of possible unique paths -> leetcode 63
 that the you can take to reach the bottom-right corner. 返回路径数量 图中可能有障碍
 note you can only move 4 directors, and either move down or right
 思路: dfs + memo

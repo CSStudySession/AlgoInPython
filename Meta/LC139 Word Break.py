@@ -41,4 +41,34 @@ word_bank = ["asdf","qwer", "dfgerhhe"]
 #word_bank = ["apple","pen"]
 #s = "catsandog"
 #word_bank = ["cats","dog","sand","and","cat"] # empty
-print(word_break(s, word_bank))
+# print(word_break(s, word_bank))
+
+'''
+纯用dfs 不用记忆化搜索的实现
+T(2^n)每个位置 都有两种选择 cut or not cut, then each sub-problem has the same thing. S(n) for stack use
+'''
+def word_break_pure_dfs(s: str, wordDict: list[str]) -> str:
+    wordSet = set(wordDict)
+    def dfs(start: int) -> str:
+        # 到达字符串末尾
+        if start == len(s):
+            return ""
+        # 尝试所有可能的切分位置
+        for end in range(start + 1, len(s) + 1):
+            word = s[start:end]
+            if word in wordSet:
+                # 递归处理剩余部分
+                rest = dfs(end)
+                if rest is not None:  # 如果后续能成功分词
+                    return word + ("" if rest == "" else " " + rest)
+        return None  # 无法分词
+    result = dfs(0)
+    return result if result is not None else ""
+
+s = "qwerasdf"
+word_bank = ["asdf","qwer", "dfgerhhe"]
+#s = "applepenapple"
+#word_bank = ["apple","pen"]
+#s = "catsandog"
+#word_bank = ["cats","dog","sand","and","cat"] # empty
+print(word_break_pure_dfs(s, word_bank))
