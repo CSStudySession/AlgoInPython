@@ -5,7 +5,7 @@ import collections
 - 若两个单词只差一个字母，则它们之间有一条边
 - 问题就转化为 在这个图中 从beginWord到endWord的最短路径长度
 
-设L为单词的长度 N为单词数量 T(NL*26)=T(NL) S(NL)
+设L为单词的长度 N为len(word_list) T(NL*26)=T(NL)  S(N+L) from visited, queue, next_word
 '''
 def ladderLength(begin_word: str, end_word: str, word_list: list[str]) -> int:
     word_set = set(word_list)

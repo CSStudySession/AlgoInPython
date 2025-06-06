@@ -21,18 +21,14 @@ ch=+: 计算之前的结果 p_op(*) -> cur*=num=2*3=6  ch is (+) 更新答案 re
 def calculate0(s) -> int:
     if not s:
         return 0
-    
     ret, cur = 0, 0 # cur:running total, ret:final result
     pre_op = '+'
-
-    s += '+' # 最后一个数可能会被漏掉 在s后面append一个'+' 方便计算
     num = 0 # 截取s中的数字 可能有多位数
-    
-    for ch in s:
+    for i, ch in enumerate(s):
         if ch.isdigit():
             num = num * 10 + int(ch) # 注意这里是= 不是+=
-        
-        if ch in ('+', '-', '*', '/'):
+        # 注意当i是最后一位时 要触发计算逻辑
+        if ch in ('+', '-', '*', '/') or i == len(s) - 1:
             if pre_op == '+':
                 cur += num
             elif pre_op == '-':
@@ -42,17 +38,16 @@ def calculate0(s) -> int:
             else: # pre_op is '/'
                 cur = int(cur / num) # 有可能有负数除法 要用int() 不能用//
             # 这里的if 和下面堆pre_op/num赋值 都在ch是运算符的if条件下
-            if ch in ('+', '-'):
+            if ch in ('+', '-') or i == len(s) - 1:
                 ret += cur
                 cur = 0
             
             pre_op = ch
             num = 0
-
     return ret
 
 # method 2: stack T O(n) S O(n)
-def calculate1(self, s: str) -> int:
+def calculate1(s: str) -> int:
     stack = []
     num = 0
     sign = "+"
