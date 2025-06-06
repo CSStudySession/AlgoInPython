@@ -137,3 +137,32 @@ some followups:
 2. 如果访问顺序不确定 自己挑顺序使得整条路最短
 NP-hard问题.枚举k!种顺序 对每个顺序做k+1次BFS 选最小值
 '''
+
+'''
+variant: return the number of possible unique paths 
+that the you can take to reach the bottom-right corner. 返回路径数量 图中可能有障碍
+note you can only move 4 directors, and either move down or right
+思路: dfs + memo
+利用 DFS 遍历所有可能路径, 用 memo 记忆子问题结果，避免重复计算；
+每次到达终点计为一条路径；
+用 grid[x][y]=2 临时标记当前路径，防止重复访问；
+回溯时恢复状态，保证其他路径可访问。
+T(m*n) S(m*n)
+'''
+def calc_number_of_path(grid: list[list[int]]) -> int:
+    m = len(grid)
+    n = len(grid[0])
+    def dfs(x, y, grid, memo):
+        if x < 0 or x >= m or y < 0 or y >= n or grid[x][y]==1 or grid[x][y]==2:
+            return 0
+        if x == m - 1 and y == n - 1:
+            return 1  # 意思是当前这条路径 算1条可行路径 不用考虑从哪个方向来的 下面dfs考虑
+        if (x,y) in memo:
+            return memo[(x,y)]
+        memo[(x,y)] = 0
+        grid[x][y] = 2  # 注意这里要set一个值 为了防止当前的dfs走回头路
+        memo[(x,y)] += dfs(x + 1, y, grid, memo)
+        memo[(x,y)] += dfs(x , y + 1,grid, memo)
+        grid[x][y] = 0 # dfs完了reset 该点可能在其他路径上也会用到
+        return memo[(x,y)]
+    return dfs(0, 0, grid, {})
