@@ -7,7 +7,7 @@ from typing import collections
 '''
 思路:
 用双向链Doubly Linked List + 哈希表dict 组合结构 实现常数时间的插入 删除与访问
-- 哈希表 val_to_ref
+- 哈希表 key_to_ref
 key: 缓存中的键
 value: 对应链表中的 Node 引用
 用于 O(1) 时间内定位链表中的节点。
@@ -29,7 +29,7 @@ class LRU_cache_v1:
         self.tail = Node(-1,-1)
         self.head.next = self.tail
         self.tail.prev = self.head
-        self.val_to_ref = collections.defaultdict(Node)
+        self.key_to_ref = collections.defaultdict(Node)
     # 从链表中移除指定节点（更新其前后指针）
     def reconnect_nodes(self, node: Node): # helper func
         prev = node.prev
@@ -46,30 +46,30 @@ class LRU_cache_v1:
         self.tail.prev = node
     
     def get(self, key: int) -> int:
-        if key not in self.val_to_ref:
+        if key not in self.key_to_ref:
             return -1
-        cur = self.val_to_ref[key]
+        cur = self.key_to_ref[key]
         val = cur.value
         self.reconnect_nodes(cur)
         self.move_to_end(cur)
         return val
 
     def put(self, key:int, val:int):
-        if key in self.val_to_ref: # 之前存在 先删掉 再插入新的
-            cur = self.val_to_ref[key]
+        if key in self.key_to_ref: # 之前存在 先删掉 再插入新的
+            cur = self.key_to_ref[key]
             self.reconnect_nodes(cur)
-            del self.val_to_ref[key]
+            del self.key_to_ref[key]
         
         cur = Node(key, val)
-        self.val_to_ref[key] = cur
+        self.key_to_ref[key] = cur
         self.move_to_end(cur)
     
     def delelte_key(self, key:int) -> bool:
-        if key not in self.val_to_ref:
+        if key not in self.key_to_ref:
             return False
-        remove = self.val_to_ref[key]
+        remove = self.key_to_ref[key]
         self.reconnect_nodes(remove)
-        del self.val_to_ref[key]
+        del self.key_to_ref[key]
         return True
 
     def last(self) -> int:

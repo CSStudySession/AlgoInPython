@@ -15,7 +15,7 @@ def verticalOrder(root: Optional[TreeNode]) -> List[List[int]]:
     # {col_idx, [list of nodes with column idx as col_idx]}
     node_dict = collections.defaultdict(list) # dict不是Python keywords, 但不推荐作为变量名
     queue = collections.deque([(root, 0)]) # 括号里是[(x,y)]形式. root col_idx as 0
-    min_col, max_col = 0, 0
+    min_col, max_col = float('inf'), float('-inf')
 
     while queue:
         node, idx = queue.popleft() # front is at the right-end
