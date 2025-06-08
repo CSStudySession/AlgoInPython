@@ -53,6 +53,7 @@ def wait_time(N:int, M:int, T:List[int]) -> int:
 
     # the next available agent would be the top of the heap
     # the waiting time is the first element of (time, idx)
+    # if agent id is required, it's agent_status[0][1]
     return agent_status[0][0]
 
 N = 2
@@ -122,3 +123,26 @@ times = [4, 5]  # each agent's service time
 n = 2  # number of agents
 m = 8  # number of customers
 print(total_wait_time(n, m, times))
+
+'''
+followup: 二分后 如果要求which agent id serve?
+Binary Search 的版本是先找出 Julie 等待的最短时间 T 
+然后需要在这个时间点看 哪个 agent 刚好变空闲并服务.
+思路:找到 T 之后 遍历所有agent 判断：
+在T - 1时间内 每个 agent 已经服务了多少人
+在恰好时间 T 时，有哪些 agent 会空闲: T % time[i] == 0
+Julie 会被其中编号最小的那一个 agent 服务
+在上面的followup code后面 加下面的代码段即可:
+
+    # 找到在 wait_time 时变空闲的 agent
+    served_before = 0
+    for time in times:
+        served_before += (wait_time - 1) // time
+    k = m - served_before - 1  # Julie 是第 k 个在 wait_time 时间被服务的人
+    for idx, t in enumerate(times):
+        if wait_time % t == 0:
+            if k == 0:
+                return wait_time, idx  # 找到为 Julie 服务的 agent
+            k -= 1
+    return wait_time, -1  # 不应该走到这里
+'''
