@@ -54,18 +54,14 @@ def build_route_with_checks(tickets):
     route_map = {}
     to_set = set()
     from_set = set()
-    in_degree = defaultdict(int)
-    out_degree = defaultdict(int)
 
-    # 构建图、统计出度/入度
+    # 构建图
     for src, dst in tickets:
         if src in route_map:
             raise ValueError(f"Multiple flights from same origin: {src}")
         route_map[src] = dst
         from_set.add(src)
         to_set.add(dst)
-        out_degree[src] += 1
-        in_degree[dst] += 1
 
     # 1. 找起点：from_set 中不在 to_set 的城市
     possible_starts = [city for city in from_set if city not in to_set]
@@ -77,8 +73,7 @@ def build_route_with_checks(tickets):
     start = possible_starts[0]
 
     # 2. 检查终点唯一性
-    all_cities = from_set | to_set
-    possible_ends = [city for city in all_cities if city not in from_set]
+    possible_ends = [city for city in to_set if city not in from_set]
     if len(possible_ends) == 0:
         raise ValueError("No valid destination city found (cycle detected).")
     if len(possible_ends) > 1:
