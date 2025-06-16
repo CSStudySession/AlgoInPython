@@ -57,8 +57,73 @@ Follow-up 问题（图片中提到）：
 [0,3] ⇒ 2    # A + B
 [3,5] ⇒ 4    # A + B + C + D
 [5,7] ⇒ 2    # C + D
+'''
 
-思路: 
+'''
+解法1: sort + sweepline
+1. 预处理成“每秒活跃事件”
+将每条 [pin, start, end) 拆成每一秒钟 (pin, t)
+去重: 用 seen = set()
+2. 扫描每一秒
+用 Set[pin] 表示当前活跃的 pin 集合
+对所有活跃时间 t 进行排序，从小到大扫描
+遇到新的时间点 t:
+- 与上一个时间点 prev 比较
+- 如果 count 没变 → 区间继续扩展
+- 如果 count 变化 → 闭合旧区间 开启新段
+T(N*D + TlogT), N is number of records, D is avg time length of (t_end - t_start)
+T: number of keys in time_counter
+S(N*D) for set()
+'''
+from collections import defaultdict
+def count_engagement_sweepline(time_data):
+    seen = set()
+    pin_at_time = defaultdict(set)  # t → set of pins
+    # 展开每一秒，避免重复 pin 在同一秒重复计数
+    for pin, start, end in time_data:
+        for t in range(start, end):
+            key = (pin, t)
+            if key not in seen:
+                seen.add(key)
+                pin_at_time[t].add(pin)
+    # 按时间排序
+    times = sorted(pin_at_time.keys())
+    result = []
+    prev_time = None
+    prev_count = None
+    start_time = None
+    for t in times:
+        count = len(pin_at_time[t])
+        if prev_time is not None and t == prev_time + 1 and count == prev_count:
+            # 区间可合并 继续延伸
+            pass
+        else:
+            # 闭合上一个区间
+            if prev_count and start_time is not None:
+                result.append([start_time, prev_time + 1, prev_count])
+            # 开启新区间
+            start_time = t
+        # 不管if or else 都更新prev_time和prev_cnt
+        prev_time = t
+        prev_count = count
+    # 处理最后一个区间
+    if prev_count and start_time is not None:
+        result.append([start_time, prev_time + 1, prev_count])
+    return result
+
+# test
+time_data = [
+    ["pinA", 0, 5],
+    ["pinB", 0, 5],
+    ["pinB", 1, 2],  # duplicate
+    ["pinC", 3, 7],
+    ["pinD", 3, 7]
+]
+print(count_engagement_sweepline(time_data))
+
+
+'''
+解法2 思路: 
 1. 将原始时间段数据展开成“秒级计数”
 使用一个defaultdict(int) 来记录每一秒钟有多少个pin被互动
 同时用一个 set 去重，避免同一个 pin 在同一秒内被重复计数（处理重复记录的问题）。
@@ -115,4 +180,4 @@ input_data = [
     ["pinC", 3, 7],
     ["pinD", 3, 7]
 ]
-print(count_engagement_with_dedup(input_data))
+# print(count_engagement_with_dedup(input_data))
