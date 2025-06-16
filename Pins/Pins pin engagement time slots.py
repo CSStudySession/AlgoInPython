@@ -58,8 +58,22 @@ Follow-up 问题（图片中提到）：
 [3,5] ⇒ 4    # A + B + C + D
 [5,7] ⇒ 2    # C + D
 
-思路:
-
+思路: 
+1. 将原始时间段数据展开成“秒级计数”
+使用一个defaultdict(int) 来记录每一秒钟有多少个pin被互动
+同时用一个 set 去重，避免同一个 pin 在同一秒内被重复计数（处理重复记录的问题）。
+2. 对所有活跃时间点排序，准备合并相邻时间段
+收集所有出现过的时间点，进行排序，得到秒级时间轴。
+接下来在这些时间点上滑动窗口，尝试合并“值相同 + 时间连续”的时间段。
+3. 区间合并逻辑：连续秒 + 值相同
+使用一个 while 循环从左到右扫时间点
+合并条件必须同时满足三点：
+时间连续 times[i + 1] == end
+值相同 time_counter[end] == count
+不越界 i + 1 < len(times)
+T(N*D + TlogT), N is number of records, D is avg time length of (t_end - t_start)
+T: number of keys in time_counter
+S(N*D) for set()
 '''
 from collections import defaultdict
 

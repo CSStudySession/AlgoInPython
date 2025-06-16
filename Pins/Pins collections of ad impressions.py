@@ -58,7 +58,7 @@ class SlidingTopK:
     一大截 窗口内ads都过期: T(w*logM). 但amertized看 大概在~T(logM) S(w(ads num) + n(freq))
     '''
     def ingest_impression(self, ad, timestamp):
-        self.cur_time = max(self.cur_time, timestamp) # 更新当前时间 数据out-of-order到达
+        self.cur_time = timestamp
         self.window.append((timestamp, ad)) # 更新time window
         # 更新ad->freq dict
         prev_count = self.freq_map[ad]

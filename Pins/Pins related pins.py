@@ -1,7 +1,7 @@
 '''
 研究一组Pins之间的关联关系 每个Pin出现在一个或多个board中 我们希望定义一种关系分数(relation score)来衡量两个Pin的关联程度
 关联分数定义：
-score = :：两个 Pin 同时出现在同一个 board 中。
+score = 1:两个 Pin 同时出现在同一个 board 中。
 score = 2:两个 Pin 不同 board, 但它们各自都和某个中间 Pin 同一个 board。
 score = k:定义为两个 Pin 所在 board 图中最短路径的长度。
 本质上是 在“Pin-Board-Pin”构建的图上求最短路径。

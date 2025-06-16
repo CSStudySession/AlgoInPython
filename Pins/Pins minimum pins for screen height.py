@@ -12,7 +12,7 @@ Clarifications
 pin高度为正整数 不考虑pin宽度
 只能刚好铺满屏幕高度 多余的也不允许
 思路:dfs + 记忆化搜索
-尝试每种pin的高度, 设当前尝试的为, 当前高度减去h后 递归求解
+尝试每种pin的高度, 设当前尝试的pin高度为h, 当前高度减去h后 递归求解
 用memo缓存子问题结果 避免重复计算
 H: screen height, N:len(pin_heights)
 T(H*N)  S(H) memo + stack
@@ -34,7 +34,7 @@ def min_pins_recursive(pin_heights, screen_height, memo):
     return memo[screen_height]
 
 def min_pins_recursive_wrapper(pin_heights, screen_height):
-    memo = [None] * (screen_height + 1)  # -2 表示未计算过
+    memo = [None] * (screen_height + 1)  # None 表示未计算过
     return min_pins_recursive(pin_heights, screen_height, memo)
 
 '''

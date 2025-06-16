@@ -9,7 +9,7 @@ Clarification
 时间只需保持一致格式 精确度到秒
 只考虑已完成的直播:不考虑正在进行但尚未结束的直播。
 每个直播都有有效的开始与结束。
-同一时间开始或结束怎么办?若直播A结束时间=B开始时间 算作同时进行
+同一时间开始或结束怎么办?若直播A结束时间=B开始时间 算作同时进行 (这个点要问清楚 下面堆的pop操作靠它)
 最小直播时长? 直播至少持续1单位时间(即start_time ≠ end_time)
 '''
 
@@ -35,7 +35,7 @@ def max_concurrent_streams(metadata_list):
 
     for start_time, end_time in time_pairs:
         # 移除所有已结束的直播
-        while ongoing_end_heap and ongoing_end_heap[0] <= start_time:
+        while ongoing_end_heap and ongoing_end_heap[0] < start_time:
             heapq.heappop(ongoing_end_heap)
         # 当前直播加入堆中
         heapq.heappush(ongoing_end_heap, end_time)
