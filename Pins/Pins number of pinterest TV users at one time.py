@@ -14,7 +14,36 @@ Clarification
 '''
 
 '''
-解法1: sort + min-heap
+解法1: sort + sweepline
+每个直播 [start, end) 看作两个事件:
++1 表示 start(开始时刻记为直播进入)
+-1 表示 end(结束时刻记为直播退出)
+“若 A.end == B.start 算作同时进行”, 因此:
+start 是直播进入点 +1
+end 是直播退出点，但仍算“正在进行” 所以在end + 1时记作 -1(即直播在 end 秒仍然存在)
+遍历新的events数组 更新一个max_live值即可.
+T(nlogn) S(n)
+'''
+def max_concurrent_streams(metadata_list):
+    if not metadata_list:
+        return 0
+    events = []
+    for data in metadata_list:
+        start, end = data[3], data[4]
+        events.append((start, 1))        # 直播开始
+        events.append((end + 1, -1))     # 直播在 end 秒仍然存在，end+1 再退出
+    # 排序按时间点，时间相同的先加后减（默认排序满足）
+    events.sort()
+    max_live = 0
+    cur_live = 0
+    for _, delta in events:
+        cur_live += delta
+        max_live = max(max_live, cur_live)
+    return max_live
+
+
+'''
+解法2: sort + min-heap
 - 将所有直播按照start_time升序排序
 - 使用一个min-heap来存放“正在进行的直播”的end_time
 - 遍历所有start_time
@@ -44,7 +73,7 @@ def max_concurrent_streams(metadata_list):
     return max_cnt
 
 '''
-解法2: two min-heaps
+解法3: two min-heaps
 - 拆分出所有start_times与end_times 分别构建两个小顶堆
 - 用两个指针遍历两个堆
   - 如果最早的 start_time ≤ 当前最早的 end_time 说明有直播开始 count+1
