@@ -15,7 +15,7 @@
 检查方式: 从起点出发 尽量走<= mid的最长距离 记录分段数是否 ≤ K+1
 3. 贪心检查函数(Greedy Check) 这个helper用在binary search中
 每次尽可能走当前允许的最大距离<= mid 并统计用了多少段.
-
+T(nlog(max_diff)) S(1)
 '''
 def min_longest_day_hike(k: int, T: list[int]) -> int:
     if not T:
@@ -61,6 +61,7 @@ followup2: 如果 T 是 list[float] 怎么做？
 更改方式：
 使用 epsilon = 1e-6 控制二分精度, 检查条件为 right - left > epsilon。
 注意: 比较浮点数时避免直接用 ==, 使用小数差值判断是否“足够接近”
+T(nlog(max_diff)) S(1)
 '''
 def min_longest_day_hike(k: int, T: list[float]) -> float:
     if not T:
