@@ -91,7 +91,7 @@ def count_engagement_with_dedup(time_data):
 
     # 对所有有计数的时间点进行排序
     result = []
-    times = sorted(time_counter.keys())
+    times = sorted(time_counter.keys()) # 这里也可以在上面维护两个min/max time 然后省略一次sort
     i = 0
     # 将连续时间点中 计数值相同的时间段合并为一个[start, end, count]区间
     while i < len(times):

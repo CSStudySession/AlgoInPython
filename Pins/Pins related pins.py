@@ -21,6 +21,15 @@ Clarification
 - 不考虑出现 cycle 的样例，但要能处理
 思路: 根据输入的board_map 构建图结构 然后在图上做bfs即可
 复杂度在每个函数上
+
+注:本题的另一种问法 与本题解决方法一样 只是换了一种说法.
+Assume you have multiple pins (you can treat it as product) with relation below:
+P1 = [a_11, a_12, ... , a_1h1]
+...
+Pn = [a_n1, a_n2, ..., a_nhn]
+Note a_ij is a product.
+- How to find there is a connection between product A and B? 
+- how to find the shortest path between the two products?
 '''
 from collections import defaultdict, deque
 

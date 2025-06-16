@@ -30,13 +30,10 @@ def calculate_engagement(intervals:List[List[int]]) -> List[tuple]:
     for start, end in intervals:
         events.append((start, 'start'))
         events.append((end, 'end'))
-    
     # 按时间点进行排序
     events.sort()
-
     cur_egmt = 0  # 当前的参与度
     result = []   # list of tuple:(interval_start, interval_end, egmt_num)
-    
     # 遍历所有的时间点
     for i in range(len(events) - 1):
         time, event_type = events[i]
@@ -51,7 +48,6 @@ def calculate_engagement(intervals:List[List[int]]) -> List[tuple]:
         # 排序后 相邻的事件可能会有相同的时间点 比如在两个活动同时结束的情况
         if time != next_time:
             result.append((time, next_time, cur_egmt))
-    
     return result
 
 # 测试
